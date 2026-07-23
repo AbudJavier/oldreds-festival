@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Festival Infantil · Old Reds · Sáb 25 Julio</title>
+<meta property="og:title" content="Festival Infantil Old Reds — Sáb 25 Julio">
+<meta property="og:description" content="Programación SUB 10, SUB 8 y SUB 6. Busca tu equipo y encuentra tus horarios y canchas. Cancha UC.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://oldreds-festival.vercel.app">
+<meta name="theme-color" content="#CD5241">
 <style>
 :root{--red:#CD5241;--dark:#141414;--ink:#2a2a2a;--paper:#faf8f6;--line:#e6e0dc;--riego:#dff0d8}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -65,6 +70,12 @@ tr.mine td{font-weight:700}
 .lc.mine{outline:4px solid var(--red);outline-offset:-2px;font-size:13px}
 .lc.mine::after{content:"TU CANCHA";position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:4px}
 .lc.dim{opacity:.35}
+.badge-now{background:#e74c3c;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;margin-left:6px;animation:pulse 1.5s infinite}
+.badge-next{background:#f39c12;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;margin-left:6px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.share-btn{display:none;width:100%;margin-top:10px;padding:12px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
+.share-btn:active{opacity:.8}
+.team-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -93,6 +104,7 @@ tr.mine td{font-weight:700}
 <div class="mis-head" id="misHead"></div>
 <div id="misList"></div>
 <div class="mis-map">📍 Tus canchas están marcadas en rojo en el <a href="#layout">mapa de canchas</a> (al final de la página).</div>
+<button class="share-btn" id="shareBtn">📤 Compartir programación</button>
 </div>
 </div>
 
@@ -281,7 +293,11 @@ tr.mine td{font-weight:700}
 <footer>Old Reds Hockey · Festival Infantil 25/07 · Cancha UC</footer>
 <script>
 (function(){
-  // 1. Leer todos los partidos desde las tablas (fuente única: el HTML visible)
+  // Colores por club
+  var TC={'O.REDS':'#CD5241','COGS':'#1a5276','S.FRANCÉS':'#2471a3','MANQ':'#28b463','ALERCES':'#1e8449','S.ITALIANO':'#45b39d','PIONEROS CH':'#7d3c98','SJCH':'#e67e22','MACCABI':'#d4ac0d','O.GABS':'#5dade2'};
+  function tColor(n){var k=Object.keys(TC);for(var i=0;i<k.length;i++){if(n.indexOf(k[i])===0)return TC[k[i]];}return '#bbb';}
+
+  // 1. Leer partidos desde las tablas (fuente única: el HTML)
   var MATCHES=[];
   document.querySelectorAll('h3').forEach(function(h){
     var m=h.textContent.match(/Cancha\s+(\d)/i);
@@ -292,7 +308,7 @@ tr.mine td{font-weight:700}
     var sec=h.closest('section');
     table.querySelectorAll('tr').forEach(function(tr){
       var td=tr.querySelectorAll('td');
-      if(td.length<4) return; // salta encabezado y fila RIEGO
+      if(td.length<4) return;
       var cat;
       if(sec.id==='sub10') cat='SUB 10';
       else if(sec.id==='sub8') cat='SUB 8';
@@ -305,6 +321,7 @@ tr.mine td{font-weight:700}
   var CATS=['SUB 10','SUB 8','SUB 6'];
   var selCat=document.getElementById('selCat'),selTeam=document.getElementById('selTeam');
   var misCard=document.getElementById('misCard'),misHead=document.getElementById('misHead'),misList=document.getElementById('misList');
+  var shareBtn=document.getElementById('shareBtn');
   CATS.forEach(function(c){
     var o=document.createElement('option');o.value=c;o.textContent=c;selCat.appendChild(o);
   });
@@ -324,30 +341,49 @@ tr.mine td{font-weight:700}
   });
   selTeam.addEventListener('change',function(){apply(selCat.value,selTeam.value);save();});
 
-  // 3. Aplicar selección: tarjeta, filas y mapa
+  // 3. Aplicar selección: tarjeta, filas, mapa y tiempo
   function mapCells(){return document.querySelectorAll('.lgrid .lc');}
   function clearAll(){
     document.querySelectorAll('tr.mine').forEach(function(r){r.classList.remove('mine');});
     mapCells().forEach(function(c){c.classList.remove('mine','dim');});
     misCard.classList.remove('on');
+    if(shareBtn) shareBtn.style.display='none';
   }
   function badgeClass(n){return (n==='1'||n==='2'||n==='3')?'g':'b';}
+  function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}
+
   function apply(cat,team){
     clearAll();
     if(!cat||!team) return;
     var mine=MATCHES.filter(function(x){return x.cat===cat&&(x.eq1===team||x.eq2===team);});
     mine.sort(function(a,b){return a.hora<b.hora?-1:1;});
     if(!mine.length) return;
+
+    // AHORA / SIGUE
+    var now=new Date(),nowM=now.getHours()*60+now.getMinutes();
+    var ahoraIdx=-1,sigIdx=-1;
+    for(var i=0;i<mine.length;i++){
+      var mm=toMins(mine[i].hora);
+      var end=(i<mine.length-1)?toMins(mine[i+1].hora):mm+15;
+      if(nowM>=mm&&nowM<end) ahoraIdx=i;
+      if(sigIdx===-1&&mm>nowM) sigIdx=i;
+    }
+
     misHead.textContent=team+' · '+cat+' — '+mine.length+' partidos';
+    misHead.style.background=tColor(team);
     misList.innerHTML='';
     var canchas={};
-    mine.forEach(function(x){
+    mine.forEach(function(x,i){
       canchas[x.cancha]=1;
       x.row.classList.add('mine');
       var rival=(x.eq1===team)?x.eq2:x.eq1;
+      var timeBadge='';
+      if(i===ahoraIdx) timeBadge='<span class="badge-now">AHORA</span>';
+      else if(i===sigIdx) timeBadge='<span class="badge-next">SIGUE</span>';
+      var dot='<span class="team-dot" style="background:'+tColor(rival)+'"></span>';
       var d=document.createElement('div');d.className='mis-item';
-      d.innerHTML='<span class="mis-hora">'+x.hora+'</span>'
-        +'<span class="mis-rival">vs '+rival+'</span>'
+      d.innerHTML='<span class="mis-hora">'+x.hora+timeBadge+'</span>'
+        +'<span class="mis-rival">'+dot+'vs '+rival+'</span>'
         +'<span class="badge '+badgeClass(x.cancha)+'">CANCHA '+x.cancha+'</span>';
       misList.appendChild(d);
     });
@@ -357,9 +393,20 @@ tr.mine td{font-weight:700}
       else c.classList.add('dim');
     });
     misCard.classList.add('on');
+    if(shareBtn&&navigator.share) shareBtn.style.display='block';
   }
 
-  // 4. Recordar selección (vuelve al escanear de nuevo)
+  // 4. Compartir
+  if(shareBtn) shareBtn.addEventListener('click',function(){
+    if(!navigator.share) return;
+    navigator.share({
+      title:selTeam.value+' — Festival Infantil Old Reds',
+      text:'Programación '+selTeam.value+' ('+selCat.value+') — Festival Old Reds, Sáb 25 Jul, Cancha UC',
+      url:'https://oldreds-festival.vercel.app'
+    }).catch(function(){});
+  });
+
+  // 5. Recordar selección
   function save(){
     try{localStorage.setItem('festival_team',JSON.stringify({c:selCat.value,t:selTeam.value}));}catch(e){}
   }
@@ -372,6 +419,11 @@ tr.mine td{font-weight:700}
       if(selTeam.value===prev.t)apply(prev.c,prev.t);
     }
   }catch(e){}
+
+  // 6. Refrescar AHORA/SIGUE cada 30s
+  setInterval(function(){
+    if(selCat.value&&selTeam.value) apply(selCat.value,selTeam.value);
+  },30000);
 })();
 </script>
 </body>
