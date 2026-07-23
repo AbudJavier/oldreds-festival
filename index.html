@@ -76,6 +76,8 @@ tr.mine td{font-weight:700}
 .share-btn{display:none;width:100%;margin-top:10px;padding:12px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
 .share-btn:active{opacity:.8}
 .team-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.mis-sep{padding:6px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8a817c;background:var(--paper);border-bottom:1px solid var(--line)}
+.mis-team-label{font-size:11px;color:#d8d0cc;margin-left:6px;font-weight:400;text-transform:none;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -318,6 +320,14 @@ tr.mine td{font-weight:700}
   });
 
   // 2. Poblar selectores
+  // Extraer clubes únicos (prefijo sin número)
+  function clubOf(name){var m=name.match(/^(.+?)\s*\d*$/);return m?m[1].trim():name;}
+  function allClubs(){
+    var s={};
+    MATCHES.forEach(function(x){s[clubOf(x.eq1)]=1;s[clubOf(x.eq2)]=1;});
+    return Object.keys(s).sort();
+  }
+
   var CATS=['SUB 10','SUB 8','SUB 6'];
   var selCat=document.getElementById('selCat'),selTeam=document.getElementById('selTeam');
   var misCard=document.getElementById('misCard'),misHead=document.getElementById('misHead'),misList=document.getElementById('misList');
@@ -325,6 +335,7 @@ tr.mine td{font-weight:700}
   CATS.forEach(function(c){
     var o=document.createElement('option');o.value=c;o.textContent=c;selCat.appendChild(o);
   });
+  var oc=document.createElement('option');oc.value='CLUB';oc.textContent='POR CLUB';selCat.appendChild(oc);
   function teamsFor(cat){
     var s={};
     MATCHES.forEach(function(x){if(x.cat===cat){s[x.eq1]=1;s[x.eq2]=1;}});
@@ -333,13 +344,18 @@ tr.mine td{font-weight:700}
   selCat.addEventListener('change',function(){
     selTeam.innerHTML='<option value="">— Elegir equipo —</option>';
     if(!selCat.value){selTeam.disabled=true;clearAll();return;}
-    teamsFor(selCat.value).forEach(function(t){
+    var items=(selCat.value==='CLUB')?allClubs():teamsFor(selCat.value);
+    items.forEach(function(t){
       var o=document.createElement('option');o.value=t;o.textContent=t;selTeam.appendChild(o);
     });
     selTeam.disabled=false;
     clearAll();
   });
-  selTeam.addEventListener('change',function(){apply(selCat.value,selTeam.value);save();});
+  selTeam.addEventListener('change',function(){
+    if(selCat.value==='CLUB') applyClub(selTeam.value);
+    else apply(selCat.value,selTeam.value);
+    save();
+  });
 
   // 3. Aplicar selección: tarjeta, filas, mapa y tiempo
   function mapCells(){return document.querySelectorAll('.lgrid .lc');}
@@ -396,12 +412,76 @@ tr.mine td{font-weight:700}
     if(shareBtn&&navigator.share) shareBtn.style.display='block';
   }
 
+  // 3b. Aplicar selección por club (todas las categorías)
+  function applyClub(club){
+    clearAll();
+    if(!club) return;
+    var mine=MATCHES.filter(function(x){return clubOf(x.eq1)===club||clubOf(x.eq2)===club;});
+    mine.sort(function(a,b){return a.hora<b.hora?-1:a.hora>b.hora?1:0;});
+    if(!mine.length) return;
+
+    // Agrupar por equipo del club
+    var teams={};
+    mine.forEach(function(x){
+      var t=(clubOf(x.eq1)===club)?x.eq1:x.eq2;
+      if(!teams[t]) teams[t]=[];
+      teams[t].push(x);
+    });
+
+    var totalCount=mine.length;
+    var teamKeys=Object.keys(teams).sort();
+    misHead.textContent=club+' — '+teamKeys.length+' equipos · '+totalCount+' partidos';
+    misHead.style.background=tColor(club);
+    misList.innerHTML='';
+    var canchas={};
+    var now=new Date(),nowM=now.getHours()*60+now.getMinutes();
+
+    teamKeys.forEach(function(tk){
+      var sep=document.createElement('div');sep.className='mis-sep';
+      var catLabel=teams[tk][0].cat;
+      sep.innerHTML=tk+'<span class="mis-team-label">'+catLabel+'</span>';
+      misList.appendChild(sep);
+
+      var sorted=teams[tk].sort(function(a,b){return a.hora<b.hora?-1:1;});
+      var ahoraIdx=-1,sigIdx=-1;
+      for(var i=0;i<sorted.length;i++){
+        var mm=toMins(sorted[i].hora);
+        var end=(i<sorted.length-1)?toMins(sorted[i+1].hora):mm+15;
+        if(nowM>=mm&&nowM<end) ahoraIdx=i;
+        if(sigIdx===-1&&mm>nowM) sigIdx=i;
+      }
+
+      sorted.forEach(function(x,i){
+        canchas[x.cancha]=1;
+        x.row.classList.add('mine');
+        var rival=(clubOf(x.eq1)===club)?x.eq2:x.eq1;
+        var timeBadge='';
+        if(i===ahoraIdx) timeBadge='<span class="badge-now">AHORA</span>';
+        else if(i===sigIdx) timeBadge='<span class="badge-next">SIGUE</span>';
+        var dot='<span class="team-dot" style="background:'+tColor(rival)+'"></span>';
+        var d=document.createElement('div');d.className='mis-item';
+        d.innerHTML='<span class="mis-hora">'+x.hora+timeBadge+'</span>'
+          +'<span class="mis-rival">'+dot+'vs '+rival+'</span>'
+          +'<span class="badge '+badgeClass(x.cancha)+'">CANCHA '+x.cancha+'</span>';
+        misList.appendChild(d);
+      });
+    });
+
+    mapCells().forEach(function(c){
+      var mm=c.textContent.match(/CANCHA\s+(\d)/);
+      if(mm&&canchas[mm[1]])c.classList.add('mine');
+      else c.classList.add('dim');
+    });
+    misCard.classList.add('on');
+    if(shareBtn&&navigator.share) shareBtn.style.display='block';
+  }
+
   // 4. Compartir
   if(shareBtn) shareBtn.addEventListener('click',function(){
     if(!navigator.share) return;
     navigator.share({
       title:selTeam.value+' — Festival Infantil Old Reds',
-      text:'Programación '+selTeam.value+' ('+selCat.value+') — Festival Old Reds, Sáb 25 Jul, Cancha UC',
+      text:'Programación '+(selCat.value==='CLUB'?selTeam.value:selTeam.value+' ('+selCat.value+')')+' — Festival Old Reds, Sáb 25 Jul, Cancha UC',
       url:'https://oldreds-festival.vercel.app'
     }).catch(function(){});
   });
@@ -416,13 +496,19 @@ tr.mine td{font-weight:700}
       selCat.value=prev.c;
       selCat.dispatchEvent(new Event('change'));
       selTeam.value=prev.t;
-      if(selTeam.value===prev.t)apply(prev.c,prev.t);
+      if(selTeam.value===prev.t){
+        if(prev.c==='CLUB') applyClub(prev.t);
+        else apply(prev.c,prev.t);
+      }
     }
   }catch(e){}
 
   // 6. Refrescar AHORA/SIGUE cada 30s
   setInterval(function(){
-    if(selCat.value&&selTeam.value) apply(selCat.value,selTeam.value);
+    if(selCat.value&&selTeam.value){
+      if(selCat.value==='CLUB') applyClub(selTeam.value);
+      else apply(selCat.value,selTeam.value);
+    }
   },30000);
 })();
 </script>
