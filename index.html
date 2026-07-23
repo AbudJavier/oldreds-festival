@@ -78,6 +78,7 @@ tr.mine td{font-weight:700}
 .team-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .mis-sep{padding:10px 14px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink);background:var(--paper);border-bottom:1px solid var(--line)}
 .mis-team-label{font-size:12px;color:#8a817c;margin-left:8px;font-weight:600;text-transform:none;letter-spacing:0}
+.mis-cat-sep{background:var(--dark);color:#fff;font-size:13px;letter-spacing:1px;border-bottom:none}
 </style>
 </head>
 <body>
@@ -420,13 +421,20 @@ tr.mine td{font-weight:700}
     mine.sort(function(a,b){return a.hora<b.hora?-1:a.hora>b.hora?1:0;});
     if(!mine.length) return;
 
-    // Agrupar por equipo + categoría (COGS 1 SUB10 ≠ COGS 1 SUB8)
+    // Agrupar por categoría → equipo (SUB 10 > COGS 1, COGS 2… SUB 8 > COGS 1…)
     var teams={},teamOrder=[];
+    var catOrder={'SUB 10':1,'SUB 8':2,'SUB 6':3};
     mine.forEach(function(x){
       var t=(clubOf(x.eq1)===club)?x.eq1:x.eq2;
-      var key=t+'|'+x.cat;
+      var key=x.cat+'|'+t;
       if(!teams[key]){teams[key]={name:t,cat:x.cat,matches:[]};teamOrder.push(key);}
       teams[key].matches.push(x);
+    });
+    teamOrder.sort(function(a,b){
+      var ga=teams[a],gb=teams[b];
+      var ca=(catOrder[ga.cat]||9),cb=(catOrder[gb.cat]||9);
+      if(ca!==cb) return ca-cb;
+      return ga.name<gb.name?-1:1;
     });
 
     var totalCount=mine.length;
@@ -435,11 +443,18 @@ tr.mine td{font-weight:700}
     misList.innerHTML='';
     var canchas={};
     var now=new Date(),nowM=now.getHours()*60+now.getMinutes();
+    var lastCat='';
 
     teamOrder.forEach(function(tk){
       var grp=teams[tk];
+      if(grp.cat!==lastCat){
+        lastCat=grp.cat;
+        var catDiv=document.createElement('div');catDiv.className='mis-sep mis-cat-sep';
+        catDiv.textContent=grp.cat;
+        misList.appendChild(catDiv);
+      }
       var sep=document.createElement('div');sep.className='mis-sep';
-      sep.innerHTML=grp.name+'<span class="mis-team-label">'+grp.cat+'</span>';
+      sep.innerHTML=grp.name;
       misList.appendChild(sep);
 
       var sorted=grp.matches.sort(function(a,b){return a.hora<b.hora?-1:1;});
