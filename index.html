@@ -40,6 +40,31 @@ summary{padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer;color:va
 .lb{background:#5b8db8}.lg{background:#7aa874}
 .lnote{font-size:11px;color:#8a817c;margin-top:8px;text-align:center}
 footer{text-align:center;font-size:11px;color:#a89f9a;padding:24px 0 10px}
+.finder{max-width:640px;margin:14px auto 0;padding:0 12px}
+.finder-card{background:var(--dark);border-radius:12px;padding:16px;color:#fff}
+.finder-card label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#d8d0cc;margin:10px 0 4px}
+.finder-card label:first-child{margin-top:0}
+.finder-card select{width:100%;padding:11px 12px;font-size:15px;border-radius:8px;border:none;background:#fff;color:var(--ink)}
+.fc-title{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.fc-sub{font-size:12px;color:#d8d0cc;margin:2px 0 4px}
+.mis{background:#fff;border:2px solid var(--red);border-radius:12px;margin-top:12px;overflow:hidden;display:none}
+.mis.on{display:block}
+.mis-head{background:var(--red);color:#fff;padding:10px 14px;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+.mis-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #f1ecea;font-size:14px}
+.mis-item:last-child{border-bottom:none}
+.mis-hora{font-weight:700;font-variant-numeric:tabular-nums;width:50px}
+.mis-rival{flex:1}
+.mis-rival small{display:block;color:#8a817c;font-size:11px}
+.badge{font-size:11px;font-weight:700;color:#fff;padding:5px 9px;border-radius:6px;white-space:nowrap}
+.badge.g{background:#7aa874}.badge.b{background:#5b8db8}
+.mis-map{padding:10px 14px;font-size:12px;background:#fdf0ee;color:var(--ink)}
+.mis-map a{color:var(--red);font-weight:700}
+tr.mine{background:#fdf0ee;box-shadow:inset 3px 0 0 var(--red)}
+tr.mine td{font-weight:700}
+.lc{position:relative;transition:all .2s}
+.lc.mine{outline:4px solid var(--red);outline-offset:-2px;font-size:13px}
+.lc.mine::after{content:"TU CANCHA";position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:4px}
+.lc.dim{opacity:.35}
 </style>
 </head>
 <body>
@@ -55,9 +80,25 @@ footer{text-align:center;font-size:11px;color:#a89f9a;padding:24px 0 10px}
 <a href="#layout">Mapa canchas</a>
 </nav>
 
+<div class="finder">
+<div class="finder-card">
+<div class="fc-title">Encuentra a tu equipo</div>
+<p class="fc-sub">Elige categoría y equipo: verás tus horarios y tu cancha marcada en el mapa.</p>
+<label for="selCat">Categoría</label>
+<select id="selCat"><option value="">— Elegir categoría —</option></select>
+<label for="selTeam">Equipo</label>
+<select id="selTeam" disabled><option value="">— Primero elige categoría —</option></select>
+</div>
+<div class="mis" id="misCard">
+<div class="mis-head" id="misHead"></div>
+<div id="misList"></div>
+<div class="mis-map">📍 Tus canchas están marcadas en rojo en el <a href="#layout">mapa de canchas</a> (al final de la página).</div>
+</div>
+</div>
+
 <section id="sub10">
 <h2>Sub 10 Damas</h2>
-<p class="cat-note">Canchas 1, 2 y 3 — partidos de Old Reds destacados en rojo</p>
+<p class="cat-note">Canchas 1, 2 y 3 — elige tu equipo arriba para destacar tus partidos</p>
 <details><summary>Ver zonas SUB 10</summary><div class="zonas">
 <div class="zona"><b>Zona A</b>O.REDS 1 · COGS 1 · MANQ 1 · COGS 2 · S.FRANCÉS 1</div>
 <div class="zona"><b>Zona B</b>COGS 3 · S.ITALIANO 1 · COGS 4 · S.FRANCÉS 2 · ALERCES 1</div>
@@ -239,12 +280,99 @@ footer{text-align:center;font-size:11px;color:#a89f9a;padding:24px 0 10px}
 
 <footer>Old Reds Hockey · Festival Infantil 25/07 · Cancha UC</footer>
 <script>
-document.querySelectorAll('table tr').forEach(function(tr){
-  var tds=tr.querySelectorAll('td');
-  for(var i=0;i<tds.length;i++){
-    if(tds[i].textContent.indexOf('O.REDS')===0){tr.classList.add('oreds');break;}
+(function(){
+  // 1. Leer todos los partidos desde las tablas (fuente única: el HTML visible)
+  var MATCHES=[];
+  document.querySelectorAll('h3').forEach(function(h){
+    var m=h.textContent.match(/Cancha\s+(\d)/i);
+    if(!m) return;
+    var cancha=m[1];
+    var table=h.nextElementSibling;
+    if(!table||table.tagName!=='TABLE') return;
+    var sec=h.closest('section');
+    table.querySelectorAll('tr').forEach(function(tr){
+      var td=tr.querySelectorAll('td');
+      if(td.length<4) return; // salta encabezado y fila RIEGO
+      var cat;
+      if(sec.id==='sub10') cat='SUB 10';
+      else if(sec.id==='sub8') cat='SUB 8';
+      else cat=(td[1].textContent.trim().indexOf('SUB 6')===0)?'SUB 6':'SUB 8';
+      MATCHES.push({cat:cat,hora:td[0].textContent.trim(),eq1:td[2].textContent.trim(),eq2:td[3].textContent.trim(),cancha:cancha,row:tr});
+    });
+  });
+
+  // 2. Poblar selectores
+  var CATS=['SUB 10','SUB 8','SUB 6'];
+  var selCat=document.getElementById('selCat'),selTeam=document.getElementById('selTeam');
+  var misCard=document.getElementById('misCard'),misHead=document.getElementById('misHead'),misList=document.getElementById('misList');
+  CATS.forEach(function(c){
+    var o=document.createElement('option');o.value=c;o.textContent=c;selCat.appendChild(o);
+  });
+  function teamsFor(cat){
+    var s={};
+    MATCHES.forEach(function(x){if(x.cat===cat){s[x.eq1]=1;s[x.eq2]=1;}});
+    return Object.keys(s).sort();
   }
-});
+  selCat.addEventListener('change',function(){
+    selTeam.innerHTML='<option value="">— Elegir equipo —</option>';
+    if(!selCat.value){selTeam.disabled=true;clearAll();return;}
+    teamsFor(selCat.value).forEach(function(t){
+      var o=document.createElement('option');o.value=t;o.textContent=t;selTeam.appendChild(o);
+    });
+    selTeam.disabled=false;
+    clearAll();
+  });
+  selTeam.addEventListener('change',function(){apply(selCat.value,selTeam.value);save();});
+
+  // 3. Aplicar selección: tarjeta, filas y mapa
+  function mapCells(){return document.querySelectorAll('.lgrid .lc');}
+  function clearAll(){
+    document.querySelectorAll('tr.mine').forEach(function(r){r.classList.remove('mine');});
+    mapCells().forEach(function(c){c.classList.remove('mine','dim');});
+    misCard.classList.remove('on');
+  }
+  function badgeClass(n){return (n==='1'||n==='2'||n==='3')?'g':'b';}
+  function apply(cat,team){
+    clearAll();
+    if(!cat||!team) return;
+    var mine=MATCHES.filter(function(x){return x.cat===cat&&(x.eq1===team||x.eq2===team);});
+    mine.sort(function(a,b){return a.hora<b.hora?-1:1;});
+    if(!mine.length) return;
+    misHead.textContent=team+' · '+cat+' — '+mine.length+' partidos';
+    misList.innerHTML='';
+    var canchas={};
+    mine.forEach(function(x){
+      canchas[x.cancha]=1;
+      x.row.classList.add('mine');
+      var rival=(x.eq1===team)?x.eq2:x.eq1;
+      var d=document.createElement('div');d.className='mis-item';
+      d.innerHTML='<span class="mis-hora">'+x.hora+'</span>'
+        +'<span class="mis-rival">vs '+rival+'</span>'
+        +'<span class="badge '+badgeClass(x.cancha)+'">CANCHA '+x.cancha+'</span>';
+      misList.appendChild(d);
+    });
+    mapCells().forEach(function(c){
+      var mm=c.textContent.match(/CANCHA\s+(\d)/);
+      if(mm&&canchas[mm[1]])c.classList.add('mine');
+      else c.classList.add('dim');
+    });
+    misCard.classList.add('on');
+  }
+
+  // 4. Recordar selección (vuelve al escanear de nuevo)
+  function save(){
+    try{localStorage.setItem('festival_team',JSON.stringify({c:selCat.value,t:selTeam.value}));}catch(e){}
+  }
+  try{
+    var prev=JSON.parse(localStorage.getItem('festival_team')||'null');
+    if(prev&&prev.c&&prev.t){
+      selCat.value=prev.c;
+      selCat.dispatchEvent(new Event('change'));
+      selTeam.value=prev.t;
+      if(selTeam.value===prev.t)apply(prev.c,prev.t);
+    }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
