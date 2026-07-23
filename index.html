@@ -420,29 +420,29 @@ tr.mine td{font-weight:700}
     mine.sort(function(a,b){return a.hora<b.hora?-1:a.hora>b.hora?1:0;});
     if(!mine.length) return;
 
-    // Agrupar por equipo del club
-    var teams={};
+    // Agrupar por equipo + categoría (COGS 1 SUB10 ≠ COGS 1 SUB8)
+    var teams={},teamOrder=[];
     mine.forEach(function(x){
       var t=(clubOf(x.eq1)===club)?x.eq1:x.eq2;
-      if(!teams[t]) teams[t]=[];
-      teams[t].push(x);
+      var key=t+'|'+x.cat;
+      if(!teams[key]){teams[key]={name:t,cat:x.cat,matches:[]};teamOrder.push(key);}
+      teams[key].matches.push(x);
     });
 
     var totalCount=mine.length;
-    var teamKeys=Object.keys(teams).sort();
-    misHead.textContent=club+' — '+teamKeys.length+' equipos · '+totalCount+' partidos';
+    misHead.textContent=club+' — '+teamOrder.length+' equipos · '+totalCount+' partidos';
     misHead.style.background=tColor(club);
     misList.innerHTML='';
     var canchas={};
     var now=new Date(),nowM=now.getHours()*60+now.getMinutes();
 
-    teamKeys.forEach(function(tk){
+    teamOrder.forEach(function(tk){
+      var grp=teams[tk];
       var sep=document.createElement('div');sep.className='mis-sep';
-      var catLabel=teams[tk][0].cat;
-      sep.innerHTML=tk+'<span class="mis-team-label">'+catLabel+'</span>';
+      sep.innerHTML=grp.name+'<span class="mis-team-label">'+grp.cat+'</span>';
       misList.appendChild(sep);
 
-      var sorted=teams[tk].sort(function(a,b){return a.hora<b.hora?-1:1;});
+      var sorted=grp.matches.sort(function(a,b){return a.hora<b.hora?-1:1;});
       var ahoraIdx=-1,sigIdx=-1;
       for(var i=0;i<sorted.length;i++){
         var mm=toMins(sorted[i].hora);
