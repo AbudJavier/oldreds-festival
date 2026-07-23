@@ -17,9 +17,13 @@ header{background:var(--dark);color:#fff;padding:22px 16px 18px;text-align:cente
 header img{width:74px;display:block;margin:0 auto 8px}
 header h1{font-size:20px;letter-spacing:.5px;text-transform:uppercase}
 header p{font-size:13px;color:#d8d0cc;margin-top:4px}
-nav{position:sticky;top:0;background:#fff;display:flex;gap:6px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid var(--line);z-index:5}
-nav a{flex:0 0 auto;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;padding:7px 12px;border:1px solid var(--line);border-radius:20px;white-space:nowrap}
-nav a.or{background:var(--red);color:#fff;border-color:var(--red)}
+#sub10{background:#fdf8f7;border-top:3px solid #e8c4bf}
+#sub8{background:#f5f9fd;border-top:3px solid #b8d4e8}
+#sub6{background:#f6faf5;border-top:3px solid #bddab5}
+.finder-map{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.finder-map summary{padding:10px 12px;font-size:13px;font-weight:700;cursor:pointer;color:var(--dark);text-transform:uppercase;letter-spacing:.5px}
+.finder-map .lgrid{padding:12px}
+.finder-map .lnote{padding:0 12px 12px}
 section{padding:18px 12px 6px;max-width:640px;margin:0 auto}
 h2{font-size:16px;text-transform:uppercase;letter-spacing:1px;color:var(--dark);border-left:4px solid var(--red);padding-left:10px;margin-bottom:4px}
 .cat-note{font-size:12px;color:#8a817c;margin:0 0 12px 14px}
@@ -93,9 +97,6 @@ tr.mine td{font-weight:700}
 <h1>Festival Infantil</h1>
 <p>SUB 10 · SUB 8 · SUB 6 — Sábado 25 de julio · Cancha UC · Old Reds</p>
 </header>
-<nav>
-<a class="or" href="#layout">Mapa canchas</a>
-</nav>
 
 <div class="finder">
 <div class="finder-card">
@@ -109,9 +110,17 @@ tr.mine td{font-weight:700}
 <div class="mis" id="misCard">
 <div class="mis-head" id="misHead"></div>
 <div id="misList"></div>
-<div class="mis-map">📍 Tus canchas están marcadas en rojo en el <a href="#layout">mapa de canchas</a> (al final de la página).</div>
+<div class="mis-map">📍 Tus canchas están marcadas en rojo en el mapa de abajo.</div>
 <button class="share-btn" id="shareBtn">📤 Compartir programación</button>
 </div>
+<details class="finder-map">
+<summary>📍 Mapa de canchas</summary>
+<div class="lgrid" id="layout">
+<div class="lc lb">CANCHA 7</div><div class="lc lb">CANCHA 5</div><div class="lc lb">CANCHA 4</div><div class="lc lg">CANCHA 2</div>
+<div class="lc lb">CANCHA 6</div><div class="lc lg" style="grid-column:span 2">CANCHA 3</div><div class="lc lg">CANCHA 1</div>
+</div>
+<p class="lnote">Banca de suplentes junto a canchas 4 y 5 · Graderías frente a cancha 1</p>
+</details>
 </div>
 
 <section id="sub10">
@@ -285,15 +294,6 @@ tr.mine td{font-weight:700}
 <tr><td class="h">12:30</td><td class="z">SUB 6</td><td>COGS 3</td><td>O.REDS 3</td></tr>
 <tr><td class="h">12:45</td><td class="z">SUB 6</td><td>O.REDS 2</td><td>COGS 2</td></tr>
 </table>
-
-<div class="layout" id="layout">
-<h3>Mapa de canchas</h3>
-<div class="lgrid">
-<div class="lc lb">CANCHA 7</div><div class="lc lb">CANCHA 5</div><div class="lc lb">CANCHA 4</div><div class="lc lg">CANCHA 2</div>
-<div class="lc lb">CANCHA 6</div><div class="lc lg" style="grid-column:span 2">CANCHA 3</div><div class="lc lg">CANCHA 1</div>
-</div>
-<p class="lnote">Banca de suplentes junto a canchas 4 y 5 · Graderías frente a cancha 1</p>
-</div>
 </section>
 
 <footer>Old Reds Hockey · Festival Infantil 25/07 · Cancha UC</footer>
@@ -373,12 +373,14 @@ tr.mine td{font-weight:700}
 
   // 3. Aplicar selección: tarjeta, filas, mapa y tiempo
   function mapCells(){return document.querySelectorAll('.lgrid .lc');}
+  var finderMap=document.querySelector('.finder-map');
   function clearAll(){
     document.querySelectorAll('tr.mine').forEach(function(r){r.classList.remove('mine');});
     mapCells().forEach(function(c){c.classList.remove('mine','dim');});
     misCard.classList.remove('on');
     if(shareBtn) shareBtn.style.display='none';
   }
+  function openMap(){if(finderMap&&!finderMap.open) finderMap.open=true;}
   function badgeClass(n){return (n==='1'||n==='2'||n==='3')?'g':'b';}
   function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}
 
@@ -422,7 +424,7 @@ tr.mine td{font-weight:700}
       if(mm&&canchas[mm[1]])c.classList.add('mine');
       else c.classList.add('dim');
     });
-    misCard.classList.add('on');
+    misCard.classList.add('on');openMap();
     if(shareBtn&&navigator.share) shareBtn.style.display='block';
   }
 
@@ -501,7 +503,7 @@ tr.mine td{font-weight:700}
       if(mm&&canchas[mm[1]])c.classList.add('mine');
       else c.classList.add('dim');
     });
-    misCard.classList.add('on');
+    misCard.classList.add('on');openMap();
     if(shareBtn&&navigator.share) shareBtn.style.display='block';
   }
 
@@ -554,7 +556,7 @@ tr.mine td{font-weight:700}
       if(mm&&canchas[mm[1]])c.classList.add('mine');
       else c.classList.add('dim');
     });
-    misCard.classList.add('on');
+    misCard.classList.add('on');openMap();
     if(shareBtn&&navigator.share) shareBtn.style.display='block';
   }
 
