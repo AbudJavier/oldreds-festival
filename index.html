@@ -611,7 +611,8 @@ tr.mine td{font-weight:700}
     try{localStorage.setItem('festival_team',JSON.stringify({c:selCat.value,t:selTeam.value}));}catch(e){}
   }
   // Header reset: tocar el banner vuelve al estado inicial
-  document.querySelector('header').addEventListener('click', function(){
+  document.querySelector('header').addEventListener('click', function(e){
+    if(e.target.tagName==='IMG') return;
     selCat.value='';
     selTeam.innerHTML='<option value="">— Primero elige categoría —</option>';
     selTeam.disabled=true;
@@ -620,7 +621,71 @@ tr.mine td{font-weight:700}
     window.scrollTo({top:0,behavior:'smooth'});
   });
 
-  // 6. Refrescar AHORA/SIGUE cada 30s
+  // 6. Easter eggs
+  // Confetti/hearts helper
+  function launchEaster(emoji,msg){
+    var overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden';
+    document.body.appendChild(overlay);
+    var particles=[];
+    for(var i=0;i<30;i++){
+      var p=document.createElement('div');
+      p.textContent=emoji;
+      p.style.cssText='position:absolute;font-size:'+(16+Math.random()*20)+'px;left:'+Math.random()*100+'%;top:-30px;opacity:1;transition:none;';
+      overlay.appendChild(p);
+      particles.push({el:p,x:Math.random()*100,speed:1.5+Math.random()*3,drift:(Math.random()-0.5)*2,y:-5});
+    }
+    if(msg){
+      var banner=document.createElement('div');
+      banner.textContent=msg;
+      banner.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.85);color:#fff;padding:16px 28px;border-radius:12px;font-size:18px;font-weight:700;z-index:10000;letter-spacing:.5px;text-align:center;pointer-events:none;';
+      document.body.appendChild(banner);
+      setTimeout(function(){banner.style.transition='opacity .8s';banner.style.opacity='0';setTimeout(function(){banner.remove();},800);},2500);
+    }
+    var frame=0;
+    function animate(){
+      frame++;
+      for(var j=0;j<particles.length;j++){
+        var pt=particles[j];
+        pt.y+=pt.speed;
+        pt.x+=pt.drift*0.3;
+        pt.el.style.top=pt.y+'%';
+        pt.el.style.left=pt.x+'%';
+        if(frame>60) pt.el.style.opacity=Math.max(0,1-(frame-60)/40);
+      }
+      if(frame<100) requestAnimationFrame(animate);
+      else overlay.remove();
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // Easter 1: Logo x5 → Eloísa
+  var logoTaps=0,logoTimer=null;
+  var logoEl=document.querySelector('header img');
+  if(logoEl){
+    logoEl.style.cursor='pointer';
+    logoEl.addEventListener('click',function(e){
+      e.stopPropagation();
+      logoTaps++;
+      clearTimeout(logoTimer);
+      logoTimer=setTimeout(function(){logoTaps=0;},1500);
+      if(logoTaps>=5){
+        logoTaps=0;
+        launchEaster('🏑','El club de la Eloísa Abud 🔴⚪');
+      }
+    });
+  }
+
+  // Easter 2: COGS 2 SUB 8 → Juega la Lau
+  var origApply=apply;
+  apply=function(cat,team){
+    origApply(cat,team);
+    if(cat==='SUB 8'&&team==='COGS 2'){
+      launchEaster('❤️','¡Juega la Lau! 🏑');
+    }
+  };
+
+  // 7. Refrescar AHORA/SIGUE cada 30s
   setInterval(function(){
     if(selCat.value&&selTeam.value){
       if(selCat.value==='CLUB') applyClub(selTeam.value);
