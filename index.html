@@ -74,8 +74,8 @@ tr.mine td{font-weight:700}
 .lc.mine{outline:4px solid var(--red);outline-offset:-2px;font-size:13px}
 .lc.mine::after{content:"TU CANCHA";position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:4px}
 .lc.dim{opacity:.35}
-.badge-now{background:#e74c3c;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;margin-left:6px;animation:pulse 1.5s infinite}
-.badge-next{background:#f39c12;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;margin-left:6px}
+.badge-now{background:#e74c3c;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;flex-shrink:0;animation:pulse 1.5s infinite}
+.badge-next{background:#f39c12;color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .share-btn{display:none;width:100%;margin-top:10px;padding:12px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
 .share-btn:active{opacity:.8}
@@ -386,6 +386,7 @@ tr.mine td{font-weight:700}
   function openMap(){if(finderMap&&!finderMap.open) finderMap.open=true;}
   function badgeClass(n){return (n==='1'||n==='2'||n==='3')?'g':'b';}
   function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}
+  function isEventDay(){var d=new Date();return d.getMonth()===6&&d.getDate()===25;}
 
   function apply(cat,team){
     clearAll();
@@ -394,14 +395,16 @@ tr.mine td{font-weight:700}
     mine.sort(function(a,b){return a.hora<b.hora?-1:1;});
     if(!mine.length) return;
 
-    // AHORA / SIGUE
-    var now=new Date(),nowM=now.getHours()*60+now.getMinutes();
-    var ahoraIdx=-1,sigIdx=-1;
-    for(var i=0;i<mine.length;i++){
-      var mm=toMins(mine[i].hora);
-      var end=(i<mine.length-1)?toMins(mine[i+1].hora):mm+15;
-      if(nowM>=mm&&nowM<end) ahoraIdx=i;
-      if(sigIdx===-1&&mm>nowM) sigIdx=i;
+    // AHORA / SIGUE (solo el día del evento)
+    var live=isEventDay(),nowM=0,ahoraIdx=-1,sigIdx=-1;
+    if(live){
+      nowM=new Date().getHours()*60+new Date().getMinutes();
+      for(var i=0;i<mine.length;i++){
+        var mm=toMins(mine[i].hora);
+        var end=(i<mine.length-1)?toMins(mine[i+1].hora):mm+15;
+        if(nowM>=mm&&nowM<end) ahoraIdx=i;
+        if(sigIdx===-1&&mm>nowM) sigIdx=i;
+      }
     }
 
     misHead.textContent=team+' · '+cat+' — '+mine.length+' partidos';
@@ -417,7 +420,8 @@ tr.mine td{font-weight:700}
       else if(i===sigIdx) timeBadge='<span class="badge-next">SIGUE</span>';
       var dot='<span class="team-dot" style="background:'+tColor(rival)+'"></span>';
       var d=document.createElement('div');d.className='mis-item';
-      d.innerHTML='<span class="mis-hora">'+x.hora+timeBadge+'</span>'
+      d.innerHTML='<span class="mis-hora">'+x.hora+'</span>'
+        +timeBadge
         +'<span class="mis-rival">'+dot+'vs '+rival+'</span>'
         +'<span class="badge '+badgeClass(x.cancha)+'">CANCHA '+x.cancha+'</span>';
       misList.appendChild(d);
@@ -458,7 +462,8 @@ tr.mine td{font-weight:700}
     misHead.style.background=color;
     misList.innerHTML='';
     var canchas={};
-    var now=new Date(),nowM=now.getHours()*60+now.getMinutes();
+    var live=isEventDay(),nowM=0;
+    if(live) nowM=new Date().getHours()*60+new Date().getMinutes();
     var lastCat='',catBox=null;
 
     teamOrder.forEach(function(tk){
@@ -478,11 +483,13 @@ tr.mine td{font-weight:700}
 
       var sorted=grp.matches.sort(function(a,b){return a.hora<b.hora?-1:1;});
       var ahoraIdx=-1,sigIdx=-1;
-      for(var i=0;i<sorted.length;i++){
-        var mm=toMins(sorted[i].hora);
-        var end=(i<sorted.length-1)?toMins(sorted[i+1].hora):mm+15;
-        if(nowM>=mm&&nowM<end) ahoraIdx=i;
-        if(sigIdx===-1&&mm>nowM) sigIdx=i;
+      if(live){
+        for(var i=0;i<sorted.length;i++){
+          var mm=toMins(sorted[i].hora);
+          var end=(i<sorted.length-1)?toMins(sorted[i+1].hora):mm+15;
+          if(nowM>=mm&&nowM<end) ahoraIdx=i;
+          if(sigIdx===-1&&mm>nowM) sigIdx=i;
+        }
       }
 
       sorted.forEach(function(x,i){
@@ -494,7 +501,8 @@ tr.mine td{font-weight:700}
         else if(i===sigIdx) timeBadge='<span class="badge-next">SIGUE</span>';
         var dot='<span class="team-dot" style="background:'+tColor(rival)+'"></span>';
         var d=document.createElement('div');d.className='mis-item';
-        d.innerHTML='<span class="mis-hora">'+x.hora+timeBadge+'</span>'
+        d.innerHTML='<span class="mis-hora">'+x.hora+'</span>'
+          +timeBadge
           +'<span class="mis-rival">'+dot+'vs '+rival+'</span>'
           +'<span class="badge '+badgeClass(x.cancha)+'">CANCHA '+x.cancha+'</span>';
         catBox.appendChild(d);
