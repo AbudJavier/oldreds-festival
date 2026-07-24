@@ -110,7 +110,7 @@ tr.mine td{font-weight:700}
 <div class="mis" id="misCard">
 <div class="mis-head" id="misHead"></div>
 <div id="misList"></div>
-<div class="mis-map">📍 Tus canchas están marcadas en rojo en el mapa de abajo.</div>
+<div class="mis-map">📍 Tus canchas están destacadas en el mapa de abajo.</div>
 <button class="share-btn" id="shareBtn">📤 Compartir programación</button>
 </div>
 <details class="finder-map">
@@ -378,7 +378,10 @@ tr.mine td{font-weight:700}
     document.querySelectorAll('tr.mine').forEach(function(r){r.classList.remove('mine');});
     mapCells().forEach(function(c){c.classList.remove('mine','dim');});
     misCard.classList.remove('on');
-    if(shareBtn) shareBtn.style.display='none';
+    misList.innerHTML='';
+    misHead.textContent='';
+    misHead.style.background='';
+    if(shareBtn){shareBtn.style.display='none';shareBtn.textContent='📤 Compartir programación';}
   }
   function openMap(){if(finderMap&&!finderMap.open) finderMap.open=true;}
   function badgeClass(n){return (n==='1'||n==='2'||n==='3')?'g':'b';}
@@ -425,7 +428,7 @@ tr.mine td{font-weight:700}
       else c.classList.add('dim');
     });
     misCard.classList.add('on');openMap();
-    if(shareBtn&&navigator.share) shareBtn.style.display='block';
+    if(shareBtn) shareBtn.style.display='block';
   }
 
   // 3b. Aplicar selección por club (todas las categorías)
@@ -504,7 +507,7 @@ tr.mine td{font-weight:700}
       else c.classList.add('dim');
     });
     misCard.classList.add('on');openMap();
-    if(shareBtn&&navigator.share) shareBtn.style.display='block';
+    if(shareBtn) shareBtn.style.display='block';
   }
 
   // 3c. Aplicar selección por horario
@@ -557,17 +560,21 @@ tr.mine td{font-weight:700}
       else c.classList.add('dim');
     });
     misCard.classList.add('on');openMap();
-    if(shareBtn&&navigator.share) shareBtn.style.display='block';
+    if(shareBtn) shareBtn.style.display='block';
   }
 
-  // 4. Compartir
+  // 4. Compartir (con fallback clipboard para escritorio)
   if(shareBtn) shareBtn.addEventListener('click',function(){
-    if(!navigator.share) return;
-    navigator.share({
-      title:selTeam.value+' — Festival Infantil Old Reds',
-      text:'Programación '+(selCat.value==='CLUB'?selTeam.value:selTeam.value+' ('+selCat.value+')')+' — Festival Old Reds, Sáb 25 Jul, Cancha UC',
-      url:'https://oldreds-festival.vercel.app'
-    }).catch(function(){});
+    var shareText='Programación '+(selCat.value==='CLUB'?selTeam.value:selTeam.value+' ('+selCat.value+')')+' — Festival Old Reds, Sáb 25 Jul, Cancha UC';
+    var shareUrl='https://oldreds-festival.vercel.app';
+    if(navigator.share){
+      navigator.share({title:selTeam.value+' — Festival Infantil Old Reds',text:shareText,url:shareUrl}).catch(function(){});
+    }else{
+      navigator.clipboard.writeText(shareText+' '+shareUrl).then(function(){
+        shareBtn.textContent='✅ Enlace copiado';
+        setTimeout(function(){shareBtn.textContent='📤 Compartir programación';},2000);
+      }).catch(function(){});
+    }
   });
 
   // 5. Recordar selección
