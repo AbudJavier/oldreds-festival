@@ -610,19 +610,15 @@ tr.mine td{font-weight:700}
   function save(){
     try{localStorage.setItem('festival_team',JSON.stringify({c:selCat.value,t:selTeam.value}));}catch(e){}
   }
-  try{
-    var prev=JSON.parse(localStorage.getItem('festival_team')||'null');
-    if(prev&&prev.c&&prev.t){
-      selCat.value=prev.c;
-      selCat.dispatchEvent(new Event('change'));
-      selTeam.value=prev.t;
-      if(selTeam.value===prev.t){
-        if(prev.c==='CLUB') applyClub(prev.t);
-        else if(prev.c==='HORARIO') applyHora(prev.t);
-        else apply(prev.c,prev.t);
-      }
-    }
-  }catch(e){}
+  // Header reset: tocar el banner vuelve al estado inicial
+  document.querySelector('header').addEventListener('click', function(){
+    selCat.value='';
+    selTeam.innerHTML='<option value="">— Primero elige categoría —</option>';
+    selTeam.disabled=true;
+    clearAll();
+    try{localStorage.removeItem('festival_team');}catch(e){}
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
 
   // 6. Refrescar AHORA/SIGUE cada 30s
   setInterval(function(){
