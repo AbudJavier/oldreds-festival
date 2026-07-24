@@ -1,0 +1,73 @@
+{
+  "evento": "Festival Infantil",
+  "organizador": "Old Reds",
+  "fecha": "Sabado 25 de julio",
+  "lugar": "Cancha UC",
+  "url": "https://oldreds-festival.vercel.app",
+  "logo_base64": "",
+  "color_principal": "#CD5241",
+  "color_oscuro": "#141414",
+  "secciones": [
+    {
+      "id": "sub10",
+      "titulo": "Sub 10 Ninas",
+      "categorias_pdf": ["S10"],
+      "categorias_excel": ["SUB 10", "S10"],
+      "canchas": [1, 2, 3],
+      "nota": "Canchas 1, 2 y 3",
+      "tinte": "#fdf8f7",
+      "borde": "#e8c4bf"
+    },
+    {
+      "id": "sub8",
+      "titulo": "Sub 8 Ninas",
+      "categorias_pdf": ["S8"],
+      "categorias_excel": ["SUB 8", "S8"],
+      "canchas": [4, 5],
+      "nota": "Canchas 4 y 5",
+      "tinte": "#f5f9fd",
+      "borde": "#b8d4e8",
+      "excluir_zonas": ["Z E"]
+    },
+    {
+      "id": "sub6",
+      "titulo": "Sub 8 Zona E + Sub 6 Mixto",
+      "categorias_pdf": ["S8"],
+      "categorias_excel": ["SUB 8", "S8", "SUB 6", "S6"],
+      "canchas": [6, 7],
+      "nota": "Canchas 6 y 7",
+      "tinte": "#f6faf5",
+      "borde": "#bddab5",
+      "solo_zonas": ["Z E"],
+      "incluir_categorias_extra": ["SUB 6"]
+    }
+  ],
+  "mapa": {
+    "filas": [
+      [
+        {"cancha": 7, "color": "b"},
+        {"cancha": 5, "color": "b"},
+        {"cancha": 4, "color": "b"},
+        {"cancha": 2, "color": "g"}
+      ],
+      [
+        {"cancha": 6, "color": "b"},
+        {"cancha": 3, "color": "g", "span": 2},
+        {"cancha": 1, "color": "g"}
+      ]
+    ],
+    "nota": "Banca de suplentes junto a canchas 4 y 5 . Graderias frente a cancha 1"
+  },
+  "clubes": {
+    "O.REDS": "#CD5241",
+    "COGS": "#1a5276",
+    "S.FRANCES": "#2471a3",
+    "MANQ": "#28b463",
+    "ALERCES": "#1e8449",
+    "S.ITALIANO": "#45b39d",
+    "PIONEROS CH": "#7d3c98",
+    "SJCH": "#e67e22",
+    "MACCABI": "#d4ac0d",
+    "O.GABS": "#5dade2"
+  }
+}
