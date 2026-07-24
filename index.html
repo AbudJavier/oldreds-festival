@@ -386,7 +386,7 @@ tr.mine td{font-weight:700}
   function openMap(){if(finderMap&&!finderMap.open) finderMap.open=true;}
   function badgeClass(n){return (n==='1'||n==='2'||n==='3')?'g':'b';}
   function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}
-  function isEventDay(){var d=new Date();return d.getMonth()===6&&d.getDate()===25;}
+  function isEventDay(){var d=new Date();return d.getMonth()===6&&(d.getDate()===24||d.getDate()===25);}
 
   function apply(cat,team){
     clearAll();
