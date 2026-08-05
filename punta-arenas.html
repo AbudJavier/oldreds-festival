@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Datos para comer en Punta Arenas</title>
+<meta name="description" content="Cinco lugares probados para comer en Punta Arenas. Cuatro caben en tres cuadras.">
+<meta name="theme-color" content="#14181B">
+<meta property="og:title" content="Datos para comer en Punta Arenas">
+<meta property="og:description" content="Cinco lugares probados. Cuatro caben en un solo circuito a pie.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F0E6; --paper-2:#FBF7EF; --card:#FFFFFF;
+    --ink:#23201B; --ink-soft:#5C544A; --line:#E4DACB;
+    --terra:#BC4F2E; --terra-deep:#9C3F22; --teal:#1F5F6B;
+    --gold:#B5862E; --green:#3C6E47;
+    --shadow:0 1px 3px rgba(35,32,27,.08),0 8px 24px rgba(35,32,27,.06);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
+  .wrap{max-width:560px;margin:0 auto;padding:0 18px;}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;background:#14181B;
+    color:#fff;padding:52px 0 38px;border-bottom:4px solid var(--terra);}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 10%, rgba(31,95,107,.55) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 60% at 90% 90%, rgba(188,79,46,.45) 0%, transparent 65%);}
+  .hero::after{content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 2px, transparent 2px 9px);}
+  .hero .wrap{position:relative;z-index:2;}
+  .kicker{font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:#F4C7A0;font-weight:700;}
+  .hero h1{font-family:'Fraunces',Georgia,serif;font-weight:900;
+    font-size:clamp(46px,15vw,72px);line-height:.92;margin:10px 0 4px;letter-spacing:-.025em;color:#fff;}
+  .hero h1 em{font-style:italic;font-weight:500;color:#F4C7A0;}
+  .hero .sub{font-family:'Fraunces',serif;font-style:italic;font-size:20px;color:#E8DDD0;margin-bottom:20px;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .chip{background:rgba(255,255,255,.95);border-radius:999px;
+    padding:7px 13px;font-size:13px;font-weight:600;color:var(--ink);}
+  .chip b{color:var(--terra-deep);}
+
+  .howto{background:#FFF;border:1px solid var(--line);border-radius:14px;
+    padding:13px 15px;margin:18px 0 4px;font-size:13.5px;box-shadow:var(--shadow);}
+  .howto b{color:var(--terra-deep);}
+
+  /* MAPA GENERAL */
+  .general-map{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px;margin:14px 0;box-shadow:var(--shadow);}
+  .general-map h3{font-family:'Fraunces',serif;font-weight:900;font-size:20px;margin:0 0 4px;letter-spacing:-.01em;}
+  .general-map p.gi{font-size:13px;color:var(--ink-soft);margin:0 0 12px;}
+  .general-map iframe{width:100%;height:280px;border:none;border-radius:10px;display:block;background:#F1EBE0;}
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;font-size:12.5px;margin-top:12px;}
+  .lg-item{display:flex;align-items:center;gap:6px;}
+  .lg-dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;}
+
+  /* ACORDEONES */
+  details.acc{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    margin:12px 0;box-shadow:var(--shadow);overflow:hidden;}
+  details.acc[open]{box-shadow:0 2px 6px rgba(35,32,27,.1),0 12px 32px rgba(35,32,27,.08);}
+  details.acc > summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;gap:12px;
+    user-select:none;-webkit-user-select:none;}
+  details.acc > summary::-webkit-details-marker{display:none;}
+  details.acc > summary::after{content:"+";margin-left:auto;font-family:'Fraunces',serif;font-size:24px;font-weight:600;
+    color:var(--terra);line-height:1;}
+  details.acc[open] > summary::after{content:"−";color:var(--ink-soft);}
+  .sum-tag{flex:0 0 auto;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+    padding:4px 9px;border-radius:6px;color:#fff;}
+  .sum-body{flex:1;min-width:0;}
+  .sum-body .t{font-family:'Fraunces',serif;font-weight:900;font-size:19px;line-height:1.1;letter-spacing:-.01em;}
+  .sum-body .s{font-size:13px;color:var(--ink-soft);margin-top:2px;font-family:'Fraunces',serif;font-style:italic;}
+  .acc-body{padding:0 18px 20px;}
+
+  .t-pre{background:var(--terra);}
+  .t-uno{background:var(--terra-deep);}
+  .t-dos{background:var(--gold);}
+  .t-tres{background:var(--green);}
+  .t-cua{background:var(--terra);}
+  .t-cin{background:var(--teal);}
+
+    color:#fff;font-family:'Fraunces',serif;font-style:italic;font-size:13px;
+    text-shadow:0 1px 5px rgba(0,0,0,.75);}
+
+  .day-line{font-size:14px;color:var(--ink-soft);margin:0 0 12px;}
+
+  /* MAPA POR LUGAR */
+  .day-map{background:var(--paper-2);border-radius:12px;padding:10px;margin:8px 0 14px;}
+  .day-map iframe{width:100%;height:210px;border:none;border-radius:8px;display:block;}
+  .day-map .ttl{font-size:12px;color:var(--ink-soft);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;}
+  .day-map iframe{min-height:210px;background:#EFE8DA url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M0 20h40M20 0v40' stroke='%23DCD0BB' stroke-width='1'/></svg>") repeat;}
+  .fallback{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;
+    background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px;
+    font-size:13px;font-weight:700;color:var(--teal);text-decoration:none;}
+  .fallback::before{content:"◍";}
+
+  /* BLOQUES */
+  .block{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;
+    padding:13px 14px;margin-bottom:11px;position:relative;overflow:hidden;}
+  .block::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--terra);opacity:.85;}
+  .block.dato::before{background:var(--teal);}
+  .block.plato::before{background:var(--gold);}
+  .block.libre::before{background:var(--green);}
+  .b-top{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap;}
+  .time{font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--terra-deep);flex:0 0 auto;}
+  .block.dato .time{color:var(--teal);}
+  .block.plato .time{color:#8a6420;}
+  .b-title{font-weight:800;font-size:16.5px;line-height:1.25;}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    padding:3px 8px;border-radius:6px;background:#F0E7D7;color:var(--ink-soft);margin-left:auto;flex:0 0 auto;align-self:flex-start;}
+  .tag.horario{background:#DCEBED;color:var(--teal);}
+  .tag.comer{background:#EAE3CF;color:#7a6a2a;}
+  .tag.ir{background:#F6E3D9;color:var(--terra-deep);}
+  .b-place{font-size:13px;color:var(--ink-soft);margin:2px 0 6px;}
+  .why{font-size:14.5px;margin:6px 0 0;}
+  .why b{color:var(--ink);}
+  .mini{font-size:13px;color:var(--ink-soft);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line);}
+  .mini .lab{font-weight:800;color:var(--ink);text-transform:uppercase;font-size:10.5px;letter-spacing:.08em;}
+  .risk{background:#FBEAE3;border-radius:9px;padding:8px 10px;margin-top:8px;font-size:13px;color:#7a3320;}
+  .risk .lab{font-weight:800;text-transform:uppercase;font-size:10.5px;letter-spacing:.08em;color:var(--terra-deep);display:block;margin-bottom:2px;}
+  a.map{display:inline-flex;align-items:center;gap:5px;color:var(--teal);font-weight:700;font-size:13px;text-decoration:none;
+    border-bottom:1.5px solid rgba(31,95,107,.3);margin-top:4px;}
+  a.map::before{content:"◍";font-size:13px;}
+
+  .buy{display:flex;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:14px;
+    padding:14px 15px;margin-bottom:10px;text-decoration:none;box-shadow:var(--shadow);}
+  .buy.terra{background:var(--terra);}
+  .buy.teal{background:var(--teal);}
+  .buy.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);}
+  .buy .ic{font-family:'Fraunces',serif;font-size:20px;font-weight:900;width:30px;text-align:center;flex:0 0 auto;}
+  .buy .bt{flex:1;}
+  .buy .bt .t{font-weight:800;font-size:14.5px;line-height:1.2;}
+  .buy .bt .s{font-size:12px;opacity:.85;margin-top:2px;}
+  .buy.ghost .bt .s{color:var(--ink-soft);}
+  .buy .arr{font-size:18px;opacity:.7;}
+
+  .sec-title{font-family:'Fraunces',serif;font-weight:900;font-size:21px;margin:18px 0 6px;letter-spacing:-.01em;}
+  .sec-intro{font-size:14px;color:var(--ink-soft);margin-bottom:14px;}
+
+  .info{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;}
+  .info h4{margin:0 0 6px;font-size:13.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--terra-deep);}
+  .info ul{margin:0;padding-left:18px;}
+  .info li{font-size:14px;margin-bottom:6px;}
+  .info li b{color:var(--ink);}
+
+  .summary{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;background:var(--card);
+    border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
+  .summary td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .summary tr:last-child td{border-bottom:none;}
+  .summary .h{font-weight:700;color:var(--terra-deep);white-space:nowrap;font-family:'Fraunces',serif;font-size:13px;}
+
+  .note{font-size:12.5px;color:var(--ink-soft);font-style:italic;margin:10px 2px;}
+  .divider{height:1px;background:var(--line);margin:20px 0;}
+
+  #compartir{width:100%;margin:16px 0 0;padding:15px;background:var(--terra);color:#fff;border:none;
+    border-radius:14px;font-family:'Hanken Grotesk',sans-serif;font-size:14.5px;font-weight:800;
+    cursor:pointer;box-shadow:var(--shadow);}
+
+  footer{text-align:center;padding:26px 18px 10px;color:var(--ink-soft);font-size:12.5px;}
+  footer .r{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--terra);margin-bottom:4px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Datos para comer · Magallanes</div>
+    <h1>Punta<br><em>Arenas</em></h1>
+    <div class="sub">Cinco lugares probados, sin relleno</div>
+    <div class="meta-row">
+      <span class="chip">📍 <b>4 de 5</b> en tres cuadras</span>
+      <span class="chip">🦀 Centolla · erizos · <b>cordero</b></span>
+      <span class="chip">⚠️ Varios cierran <b>domingo</b></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="howto"><b>Cómo usar:</b> toca cualquier ficha para abrirla. Toca de nuevo para cerrarla. Los mapas y el botón "Cómo llegar" abren Google Maps directo en el local.</div>
+
+<!-- MAPA GENERAL -->
+<div class="general-map">
+  <h3>Los cinco en un mapa</h3>
+  <p class="gi">Kiosco Roca, Roca Mar, Sotito's y Aima están a pasos entre sí, en el centro. La Yegua Loca queda cerro arriba, a ~1 km.</p>
+  <iframe src="https://www.google.com/maps?q=Kiosco+Roca+Punta+Arenas+Chile&z=16&output=embed" loading="lazy" title="Mapa del centro de Punta Arenas"></iframe>
+  <a class="fallback" href="https://www.google.com/maps/search/?api=1&query=Pdte+Julio+A+Roca+875+Punta+Arenas" target="_blank" rel="noopener">Abrir el centro en Google Maps</a>
+  <div class="legend">
+    <div class="lg-item"><span class="lg-dot" style="background:#9C3F22"></span> Kiosco Roca</div>
+    <div class="lg-item"><span class="lg-dot" style="background:#B5862E"></span> Sotito's</div>
+    <div class="lg-item"><span class="lg-dot" style="background:#3C6E47"></span> Roca Mar</div>
+    <div class="lg-item"><span class="lg-dot" style="background:#BC4F2E"></span> Aima</div>
+    <div class="lg-item"><span class="lg-dot" style="background:#1F5F6B"></span> La Yegua Loca</div>
+  </div>
+</div>
+
+<!-- ANTES DE IR -->
+<details class="acc" open>
+  <summary>
+    <span class="sum-tag t-pre">Empezar</span>
+    <div class="sum-body"><div class="t">Antes de salir</div><div class="s">Horarios y orden del día</div></div>
+  </summary>
+  <div class="acc-body">
+    <h3 class="sec-title">Cómo armar el día</h3>
+    <p class="sec-intro">Kiosco temprano, empanadas al mediodía, Sotito's o Aima de noche. La Yegua Loca déjenla para una tarde con luz: la vista es la mitad del asunto.</p>
+
+    <div class="risk"><span class="lab">Lo primero</span>
+      Los horarios mandan más que el hambre. <b>Kiosco cierra domingo</b> y el sábado cierra a la una. <b>Sotito's cierra martes y domingo.</b> Aima abre todos los días.</div>
+
+    <h3 class="sec-title">Horarios de un vistazo</h3>
+    <table class="summary">
+      <tr><td class="h">Kiosco Roca</td><td>Lu–Vi 7:00–19:00 · Sá 8:00–13:00</td><td><b>Do cerrado</b></td></tr>
+      <tr><td class="h">Roca Mar</td><td>Lu–Sá 12:00–17:30 · Do 11:00–16:00</td><td>Abre todo</td></tr>
+      <tr><td class="h">Sotito's</td><td>12:00–15:00 · 18:30–23:00</td><td><b>Ma y Do cerrado</b></td></tr>
+      <tr><td class="h">Aima</td><td>Todos los días 12:30–23:45</td><td>Reservar</td></tr>
+      <tr><td class="h">Yegua Loca</td><td>Restaurante del hotel</td><td>Avisar</td></tr>
+    </table>
+
+    <div class="info"><h4>Reservar antes</h4>
+      <ul><li><b>Aima</b> es chico y se llena. Reserva por teléfono o por la web.</li>
+      <li><b>Sotito's</b> conviene reservar en temporada alta.</li>
+      <li><b>Roca Mar</b> no reserva: es un local mínimo, se come de pie.</li></ul></div>
+
+    <a class="buy terra" href="tel:+56966392626">
+      <span class="ic">A</span><span class="bt"><span class="t">Llamar a Aima</span><span class="s">+56 9 6639 2626 · para la mesa</span></span><span class="arr">→</span>
+    </a>
+    <a class="buy ghost" href="tel:+56612243565">
+      <span class="ic">S</span><span class="bt"><span class="t">Llamar a Sotito's</span><span class="s">+56 61 224 3565</span></span><span class="arr">→</span>
+    </a>
+  </div>
+</details>
+
+<!-- 1 KIOSCO ROCA -->
+<details class="acc">
+  <summary>
+    <span class="sum-tag t-uno">Uno</span>
+    <div class="sum-body"><div class="t">Kiosco Roca</div><div class="s">El sánguche con queso · desayuno</div></div>
+  </summary>
+  <div class="acc-body">
+    <p class="day-line">Parada obligada. La fila lo confirma sola.</p>
+
+    <div class="block plato">
+      <div class="b-top"><span class="time">Pedir</span><span class="b-title">Sánguche de queso, con mayo</span><span class="tag comer">Comer</span></div>
+      <div class="why">La leche no me convenció. El sánguche con queso sí — y <b>con mayo, mejor</b>. Hay que ir igual, aunque no te guste: es la parada obligada de la ciudad.</div>
+      <div class="mini"><span class="lab">Honesto</span> La leche con plátano es lo que todo el mundo celebra. A mí no me llegó. Prueben y decidan.</div>
+    </div>
+
+    <div class="block dato">
+      <div class="b-top"><span class="time">Dónde</span><span class="b-title">Pdte. Julio A. Roca 875</span><span class="tag horario">7:00–19:00</span></div>
+      <div class="b-place">Lu a Vi 7:00–19:00 · Sá 8:00–13:00</div>
+      <div class="risk"><span class="lab">Ojo</span> <b>Domingo cerrado</b> y el sábado cierra a la una. Es local chico: a la hora peak se espera.</div>
+      <a class="map" href="https://www.google.com/maps/search/?api=1&query=Kiosco+Roca+Punta+Arenas&query_place_id=ChIJCwMgR3pjsr0RvBBWrfHW2h8" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+
+    <div class="day-map">
+      <div class="ttl">Kiosco Roca · calle Roca 875</div>
+      <iframe src="https://www.google.com/maps?q=Kiosco+Roca+Punta+Arenas+Chile&output=embed" loading="lazy" title="Mapa Kiosco Roca"></iframe>
+      <a class="fallback" href="https://www.google.com/maps/search/?api=1&query=Kiosco+Roca+Punta+Arenas&query_place_id=ChIJCwMgR3pjsr0RvBBWrfHW2h8" target="_blank" rel="noopener">Abrir en Google Maps</a>
+    </div>
+
+    <a class="buy ghost" href="http://www.kioskoroca.cl/" target="_blank" rel="noopener">
+      <span class="ic">K</span><span class="bt"><span class="t">Sitio web</span><span class="s">kioskoroca.cl · sin carta online</span></span><span class="arr">→</span>
+    </a>
+  </div>
+</details>
+
+<!-- 2 SOTITO'S -->
+<details class="acc">
+  <summary>
+    <span class="sum-tag t-dos">Dos</span>
+    <div class="sum-body"><div class="t">Sotito's</div><div class="s">Los erizos · tradicional</div></div>
+  </summary>
+  <div class="acc-body">
+    <p class="day-line">Pasó por un período malo y volvió a levantar.</p>
+
+    <div class="block plato">
+      <div class="b-top"><span class="time">Pedir</span><span class="b-title">Erizos</span><span class="tag comer">Comer</span></div>
+      <div class="why">Me comí unos <b>erizos de locura</b>. Son el producto de la zona y acá los tratan bien. La centolla también sale buena.</div>
+      <div class="mini"><span class="lab">Honesto</span> Es caro y el local puede estar frío. Se paga por el producto, no por el ambiente.</div>
+    </div>
+
+    <div class="block dato">
+      <div class="b-top"><span class="time">Dónde</span><span class="b-title">B. O'Higgins 1138</span><span class="tag horario">Dos turnos</span></div>
+      <div class="b-place">12:00–15:00 y 18:30–23:00</div>
+      <div class="risk"><span class="lab">Crítico</span> <b>Cierra martes y domingo.</b> Y parte en dos turnos: entre las 15:00 y las 18:30 no hay servicio.</div>
+      <a class="map" href="https://www.google.com/maps/search/?api=1&query=Sotito%27s+Restaurant+Punta+Arenas&query_place_id=ChIJMyoZDnpjsr0RQBNDhYKSEG4" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+
+    <div class="day-map">
+      <div class="ttl">Sotito's · O'Higgins 1138</div>
+      <iframe src="https://www.google.com/maps?q=Sotito%27s+Restaurant+Punta+Arenas+Chile&output=embed" loading="lazy" title="Mapa Sotito's"></iframe>
+      <a class="fallback" href="https://www.google.com/maps/search/?api=1&query=Sotito%27s+Restaurant+Punta+Arenas&query_place_id=ChIJMyoZDnpjsr0RQBNDhYKSEG4" target="_blank" rel="noopener">Abrir en Google Maps</a>
+    </div>
+
+    <a class="buy" href="tel:+56612243565">
+      <span class="ic">☎</span><span class="bt"><span class="t">Reservar por teléfono</span><span class="s">+56 61 224 3565 · no publican carta online</span></span><span class="arr">→</span>
+    </a>
+  </div>
+</details>
+
+<!-- 3 ROCA MAR -->
+<details class="acc">
+  <summary>
+    <span class="sum-tag t-tres">Tres</span>
+    <div class="sum-body"><div class="t">Roca Mar</div><div class="s">La empanada de centolla · el hallazgo</div></div>
+  </summary>
+  <div class="acc-body">
+    <p class="day-line">Dos cuadras más arriba del Kiosco, por la misma calle. Se pasa de largo si no lo estás buscando.</p>
+
+    <div class="block plato">
+      <div class="b-top"><span class="time">Pedir</span><span class="b-title">Empanada de centolla</span><span class="tag comer">Comer</span></div>
+      <div class="why">La <b>mejor empanada de marisco que me he comido</b>. Punto. Las de camarón queso y las de mariscos surtidos también salen bien.</div>
+      <div class="mini"><span class="lab">Tip</span> Es barato y las hacen a mano en el momento. Vale la pena pedir de más.</div>
+    </div>
+
+    <div class="block dato">
+      <div class="b-top"><span class="time">Dónde</span><span class="b-title">Pdte. Julio A. Roca 953</span><span class="tag horario">12:00–17:30</span></div>
+      <div class="b-place">Lu a Sá 12:00–17:30 · Do 11:00–16:00 · a 150 m del Kiosco Roca</div>
+      <div class="risk"><span class="lab">Ojo</span> Local <b>muy chico</b>: se come de pie en un mesón contra la ventana. No hay mesas ni reservas. Solo abre al mediodía y hasta media tarde.</div>
+      <a class="map" href="https://www.google.com/maps/search/?api=1&query=Roca+Mar+Comida+Al+Paso+Punta+Arenas&query_place_id=ChIJ6ffYGXpjsr0RdNqY7yOqYHU" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+
+    <div class="day-map">
+      <div class="ttl">Roca Mar · misma calle que el Kiosco</div>
+      <iframe src="https://www.google.com/maps?q=Roca+Mar+Comida+Al+Paso+Punta+Arenas+Chile&output=embed" loading="lazy" title="Mapa Roca Mar"></iframe>
+      <a class="fallback" href="https://www.google.com/maps/search/?api=1&query=Roca+Mar+Comida+Al+Paso+Punta+Arenas&query_place_id=ChIJ6ffYGXpjsr0RdNqY7yOqYHU" target="_blank" rel="noopener">Abrir en Google Maps</a>
+    </div>
+
+    <a class="buy ghost" href="https://www.facebook.com/RocaMarPuntaArenas/" target="_blank" rel="noopener">
+      <span class="ic">f</span><span class="bt"><span class="t">Facebook</span><span class="s">Es su único canal · no tienen web ni carta online</span></span><span class="arr">→</span>
+    </a>
+  </div>
+</details>
+
+<!-- 4 AIMA -->
+<details class="acc">
+  <summary>
+    <span class="sum-tag t-cua">Cuatro</span>
+    <div class="sum-body"><div class="t">Aima</div><div class="s">Centolla y cordero · el mejor</div></div>
+  </summary>
+  <div class="acc-body">
+    <p class="day-line">El mejor restaurante de la ciudad. Si van a gastar una vez, gasten acá.</p>
+
+    <div class="block plato">
+      <div class="b-top"><span class="time">Pedir</span><span class="b-title">Centolla y cordero</span><span class="tag comer">Comer</span></div>
+      <div class="why">Ahí van los dos productos de Magallanes bien hechos: <b>centolla y cordero</b>. Tienen pecera, así que el marisco entra fresco.</div>
+      <div class="mini"><span class="lab">Honesto</span> La comida es pareja y buena. El servicio no siempre: hay reseñas recientes que reclaman atención irregular. Vale la pena igual.</div>
+    </div>
+
+    <div class="block dato">
+      <div class="b-top"><span class="time">Dónde</span><span class="b-title">Pdte. Federico Errázuriz 970</span><span class="tag horario">12:30–23:45</span></div>
+      <div class="b-place">Todos los días · el único de los cinco que no cierra ningún día</div>
+      <div class="risk"><span class="lab">Crítico</span> Es <b>chico y se llena</b>. Sin reserva pueden terminar comiendo en la barra — que tampoco está mal, pero no es lo mismo si van varios.</div>
+      <a class="map" href="https://www.google.com/maps/search/?api=1&query=Aima+Restaurant+Punta+Arenas&query_place_id=ChIJDQjhm59jsr0R5nhO93yQlc4" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+
+    <div class="day-map">
+      <div class="ttl">Aima · Errázuriz 970</div>
+      <iframe src="https://www.google.com/maps?q=Aima+Restaurant+Punta+Arenas+Chile&output=embed" loading="lazy" title="Mapa Aima"></iframe>
+      <a class="fallback" href="https://www.google.com/maps/search/?api=1&query=Aima+Restaurant+Punta+Arenas&query_place_id=ChIJDQjhm59jsr0R5nhO93yQlc4" target="_blank" rel="noopener">Abrir en Google Maps</a>
+    </div>
+
+    <a class="buy terra" href="https://www.aimapatagonia.com/" target="_blank" rel="noopener">
+      <span class="ic">A</span><span class="bt"><span class="t">Ver la carta</span><span class="s">aimapatagonia.com · el único con menú publicado</span></span><span class="arr">→</span>
+    </a>
+    <a class="buy ghost" href="tel:+56966392626">
+      <span class="ic">☎</span><span class="bt"><span class="t">Reservar</span><span class="s">+56 9 6639 2626</span></span><span class="arr">→</span>
+    </a>
+  </div>
+</details>
+
+<!-- 5 LA YEGUA LOCA -->
+<details class="acc">
+  <summary>
+    <span class="sum-tag t-cin">Cinco</span>
+    <div class="sum-body"><div class="t">La Yegua Loca</div><div class="s">El ambiente · hotel boutique</div></div>
+  </summary>
+  <div class="acc-body">
+    <p class="day-line">El restaurante del hotel boutique, cerro arriba.</p>
+
+    <div class="block plato">
+      <div class="b-top"><span class="time">Ir</span><span class="b-title">Por el lugar, no por la carta</span><span class="tag comer">Copa</span></div>
+      <div class="why"><b>Más que correcto</b>, y el ambiente es lindo de verdad. Vale por dónde está y cómo está hecho, más que por un plato en particular.</div>
+      <div class="mini"><span class="lab">Cuándo</span> Con luz. La vista del estrecho desde el cerro es la mitad del asunto — de noche se pierde.</div>
+    </div>
+
+    <div class="block dato">
+      <div class="b-top"><span class="time">Dónde</span><span class="b-title">Mons. José Fagnano 310</span><span class="tag ir">12 min a pie</span></div>
+      <div class="b-place">Fuera del circuito de los otros cuatro · ~1 km desde el centro, subiendo</div>
+      <div class="risk"><span class="lab">Ojo</span> Es <b>subida real</b>. Si van con gente mayor o hace viento —que hace— tomen taxi para llegar y bajen caminando.</div>
+      <a class="map" href="https://www.google.com/maps/search/?api=1&query=Hotel+La+Yegua+Loca+Punta+Arenas&query_place_id=ChIJ51KctHxjsr0RAwsKgNdgEDE" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+
+    <div class="day-map">
+      <div class="ttl">La Yegua Loca · Fagnano 310, cerro arriba</div>
+      <iframe src="https://www.google.com/maps?q=Hotel+La+Yegua+Loca+Punta+Arenas+Chile&output=embed" loading="lazy" title="Mapa La Yegua Loca"></iframe>
+      <a class="fallback" href="https://www.google.com/maps/search/?api=1&query=Hotel+La+Yegua+Loca+Punta+Arenas&query_place_id=ChIJ51KctHxjsr0RAwsKgNdgEDE" target="_blank" rel="noopener">Abrir en Google Maps</a>
+    </div>
+
+    <a class="buy teal" href="http://www.yegualoca.com/" target="_blank" rel="noopener">
+      <span class="ic">Y</span><span class="bt"><span class="t">Sitio del hotel</span><span class="s">yegualoca.com · sin carta publicada</span></span><span class="arr">→</span>
+    </a>
+  </div>
+</details>
+
+<button id="compartir">Compartir esta lista</button>
+
+<p class="note">Los horarios son los publicados por cada local y cambian en temporada baja. Si van con el día justo, llamen antes.</p>
+
+</main>
+
+<footer>
+  <div class="r">Buen viaje.</div>
+  Cinco datos de Punta Arenas · lista personal<br>
+  Las direcciones abren Google Maps.
+</footer>
+
+<script>
+  document.getElementById('compartir').addEventListener('click', async function () {
+    var btn = this;
+    var datos = {
+      title: 'Punta Arenas · Cinco datos',
+      text: 'Cinco lugares probados en Punta Arenas.',
+      url: location.href
+    };
+    try {
+      if (navigator.share) { await navigator.share(datos); return; }
+      await navigator.clipboard.writeText(location.href);
+      btn.textContent = 'Link copiado';
+      setTimeout(function(){ btn.textContent = 'Compartir esta lista'; }, 2200);
+    } catch (e) {
+      btn.textContent = 'Copia el link desde la barra';
+      setTimeout(function(){ btn.textContent = 'Compartir esta lista'; }, 2600);
+    }
+  });
+</script>
+
+</body>
+</html>
