@@ -1,7 +1,12 @@
 {
   "redirects": [
     {
-      "source": "/:ruta*",
+      "source": "/",
+      "destination": "https://oldreds-web.vercel.app/festival/2026-julio",
+      "permanent": false
+    },
+    {
+      "source": "/(.*)",
       "destination": "https://oldreds-web.vercel.app/festival/2026-julio",
       "permanent": false
     }
