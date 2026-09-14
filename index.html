@@ -71,11 +71,11 @@
 :root{--red:var(--or-red);--dark:var(--or-ink);--ink:var(--or-paper-ink);--paper:var(--or-paper);--line:var(--or-paper-line);--riego:var(--or-ok-bg);--dim:var(--or-paper-dim)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--paper);color:var(--ink);padding-bottom:60px}
-header{background:var(--dark);color:#fff;padding:22px 16px 18px;text-align:center;border-bottom:4px solid var(--red);position:relative;overflow:hidden}
-header::before{content:"OLD REDS HOCKEY";font-family:var(--or-display);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:min(64px,7vw);font-weight:900;letter-spacing:8px;text-transform:uppercase;color:rgba(255,255,255,.1);white-space:nowrap;pointer-events:none}
-header img{width:74px;display:block;margin:0 auto 8px}
-header h1{font-family:var(--or-display);font-size:24px;letter-spacing:.5px;text-transform:uppercase}
-header p{font-size:13px;color:#d8d0cc;margin-top:4px}
+.hero{background:var(--dark);color:#fff;padding:22px 16px 18px;text-align:center;border-bottom:4px solid var(--red);position:relative;overflow:hidden}
+.hero::before{content:"OLD REDS HOCKEY";font-family:var(--or-display);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:min(64px,7vw);font-weight:900;letter-spacing:8px;text-transform:uppercase;color:rgba(255,255,255,.1);white-space:nowrap;pointer-events:none}
+.hero img{width:74px;display:block;margin:0 auto 8px}
+.hero h1{font-family:var(--or-display);font-size:24px;letter-spacing:.5px;text-transform:uppercase}
+.hero p{font-size:13px;color:#d8d0cc;margin-top:4px}
 #sub10{background:#fdf8f7;border-top:3px solid #e8c4bf}
 #sub8{background:#f5f9fd;border-top:3px solid #b8d4e8}
 #sub6{background:#f6faf5;border-top:3px solid #bddab5}
@@ -156,14 +156,144 @@ tr.mine td{font-weight:700}
 .mis-group-head{padding:8px 12px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff}
 .mis-hora-sep{background:var(--dark);color:#fff;padding:10px 14px;font-size:15px;font-weight:700;letter-spacing:.5px}
 .mis-cancha-head{padding:6px 12px;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+
+/* --- barra superior común, copia de oldreds-web/lib/marca/header.css --- */
+.or-head {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--or-ink);
+  border-bottom: 1px solid var(--or-line);
+}
+
+.or-head-in {
+  display: flex;
+  align-items: center;
+  gap: 12px 16px;
+  flex-wrap: wrap;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 10px 16px;
+}
+
+.or-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  text-decoration: none;
+}
+
+.or-crest {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.or-mark {
+  display: block;
+  margin: 0;
+  font-family: var(--or-display);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or-bone);
+}
+
+.or-ctx {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--or-mono);
+  font-size: 10px;
+  letter-spacing: var(--or-label-track);
+  text-transform: uppercase;
+  color: var(--or-dim);
+}
+
+/* Empuja a la derecha lo que venga después */
+.or-push {
+  margin-left: auto;
+}
+
+.or-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.or-link {
+  font-family: var(--or-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--or-dim);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.or-link:hover {
+  color: var(--or-bone);
+}
+
+/* El botón de acción del producto: uno solo por barra */
+.or-link-cta {
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-weight: 600;
+  background: var(--or-bone);
+  color: var(--or-ink);
+}
+
+.or-link-cta:hover {
+  background: #fff;
+  color: var(--or-ink);
+}
+
+/* El puente a los otros dos productos: presente pero discreto */
+.or-cross {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 14px;
+  border-left: 1px solid var(--or-line);
+}
+
+@media (max-width: 640px) {
+  .or-cross {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
 </style>
 </head>
 <body>
-<header>
+<header class="or-head">
+<div class="or-head-in">
+<a class="or-brand" href="https://oldreds-web.vercel.app" aria-label="Ir al sitio de Old Reds">
+<img class="or-crest" src="data:image/png;base64,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" alt="">
+<span><span class="or-mark">Old Reds</span><span class="or-ctx">Festival infantil</span></span>
+</a>
+<div class="or-push or-links">
+<a class="or-link" href="https://oldreds-app.vercel.app/app">App</a>
+<span class="or-cross"><a class="or-link" href="https://oldreds-web.vercel.app">Sitio del club</a></span>
+</div>
+</div>
+</header>
+<div class="hero">
 <img src="data:image/png;base64,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" alt="Old Reds Hockey">
 <h1>Festival Infantil</h1>
 <p>SUB 10 · SUB 8 · SUB 6 — Sábado 25 de julio · Cancha UC · Old Reds</p>
-</header>
+</div>
 
 <div class="finder">
 <div class="finder-card">
@@ -375,7 +505,8 @@ tr.mine td{font-weight:700}
 </table>
 </section>
 
-<footer>Old Reds Hockey · Festival Infantil 25/07 · Cancha UC</footer>
+<footer>
+<p style="margin-bottom:8px"><a href="https://oldreds-web.vercel.app" style="color:var(--or-red);text-decoration:underline">Ir al sitio de Old Reds</a></p>Old Reds Hockey · Festival Infantil 25/07 · Cancha UC</footer>
 <script>
 (function(){
   // Colores por club
