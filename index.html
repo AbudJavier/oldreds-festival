@@ -8,15 +8,73 @@
 <meta property="og:description" content="Programación SUB 10, SUB 8 y SUB 6. Busca tu equipo y encuentra tus horarios y canchas. Cancha UC.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://oldreds-festival.vercel.app">
-<meta name="theme-color" content="#CD5241">
+<meta name="theme-color" content="#C1291F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--red:#CD5241;--dark:#141414;--ink:#2a2a2a;--paper:#faf8f6;--line:#e6e0dc;--riego:#dff0d8}
+/* ===========================================================================
+   OLD REDS — identidad compartida
+   Fuente de verdad: oldreds-web/lib/marca/tokens.css
+   Copiado tal cual en oldreds-app y oldreds-festival. Si cambia acá, se
+   reemplaza allá; no se editan las copias.
+
+   Antes de esto el club tenía cuatro rojos distintos: #CC1719 en la app,
+   #CD5241 en el festival, #C1291F en el sitio y #DB3C2E en el sitio viejo.
+   El de abajo es el oficial.
+   =========================================================================== */
+
+:root {
+  /* --- Rojo del club -------------------------------------------------- */
+  --or-red: #c1291f; /* sobre fondo claro */
+  --or-red-lit: #e8503f; /* sobre fondo oscuro */
+
+  /* --- Turquesa: marca la rama de hockey.
+         Sale de la polera de entrenamiento del club. ---------------------- */
+  --or-turq: #1b837c;
+  --or-turq-lit: #39a79f;
+
+  /* --- Neutros cálidos, para fondo oscuro ----------------------------- */
+  --or-ink: #141010;
+  --or-ink-deep: #0e0b0a;
+  --or-surface: #1e1817;
+  --or-line: #332a28;
+  --or-dim: #9b8e89;
+  --or-mute: #c6b9b4;
+  --or-bone: #ede4e0;
+
+  /* --- Neutros claros, para lo que se usa al sol (el festival) --------- */
+  --or-paper: #faf8f6;
+  --or-paper-surface: #ffffff;
+  --or-paper-line: #e6e0dc;
+  --or-paper-ink: #2a2a2a;
+  --or-paper-dim: #8a817c;
+
+  /* --- Semáforo ------------------------------------------------------- */
+  --or-ok: #3c6e3c;
+  --or-ok-bg: #dff0d8;
+  --or-alerta: #a87a18;
+
+  /* --- Tipografías ----------------------------------------------------
+         Big Shoulders para títulos, Newsreader para leer, Plex Mono para
+         datos: horas, precios, rótulos. */
+  --or-display: "Big Shoulders", "Arial Narrow", sans-serif;
+  --or-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --or-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* --- Rótulo en mayúscula: el recurso que ordena los tres productos --- */
+  --or-label-size: 0.6875rem; /* 11px: menos que esto no se lee en celular */
+  --or-label-track: 0.18em;
+}
+
+/* Nombres locales, apuntando a los tokens del club */
+:root{--red:var(--or-red);--dark:var(--or-ink);--ink:var(--or-paper-ink);--paper:var(--or-paper);--line:var(--or-paper-line);--riego:var(--or-ok-bg);--dim:var(--or-paper-dim)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--paper);color:var(--ink);padding-bottom:60px}
 header{background:var(--dark);color:#fff;padding:22px 16px 18px;text-align:center;border-bottom:4px solid var(--red);position:relative;overflow:hidden}
-header::before{content:"OLD REDS HOCKEY";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:min(64px,7vw);font-weight:900;letter-spacing:8px;text-transform:uppercase;color:rgba(255,255,255,.1);white-space:nowrap;pointer-events:none}
+header::before{content:"OLD REDS HOCKEY";font-family:var(--or-display);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:min(64px,7vw);font-weight:900;letter-spacing:8px;text-transform:uppercase;color:rgba(255,255,255,.1);white-space:nowrap;pointer-events:none}
 header img{width:74px;display:block;margin:0 auto 8px}
-header h1{font-size:20px;letter-spacing:.5px;text-transform:uppercase}
+header h1{font-family:var(--or-display);font-size:24px;letter-spacing:.5px;text-transform:uppercase}
 header p{font-size:13px;color:#d8d0cc;margin-top:4px}
 #sub10{background:#fdf8f7;border-top:3px solid #e8c4bf}
 #sub8{background:#f5f9fd;border-top:3px solid #b8d4e8}
@@ -34,14 +92,14 @@ header p{font-size:13px;color:#d8d0cc;margin-top:4px}
 .fair-list li::before{content:"✓";position:absolute;left:0;color:#b8960c;font-weight:700}
 .fair-cta{font-size:14px;font-weight:700;color:var(--red);text-align:center;letter-spacing:.5px}
 section{padding:18px 12px 6px;max-width:640px;margin:0 auto}
-h2{font-size:16px;text-transform:uppercase;letter-spacing:1px;color:var(--dark);border-left:4px solid var(--red);padding-left:10px;margin-bottom:4px}
+h2{font-family:var(--or-display);font-size:20px;text-transform:uppercase;letter-spacing:1px;color:var(--dark);border-left:4px solid var(--red);padding-left:10px;margin-bottom:4px}
 .cat-note{font-size:12px;color:#8a817c;margin:0 0 12px 14px}
-h3{font-size:13px;text-transform:uppercase;letter-spacing:.5px;background:var(--dark);color:#fff;padding:8px 12px;border-radius:8px 8px 0 0;margin-top:16px}
+h3{font-family:var(--or-display);font-size:15px;text-transform:uppercase;letter-spacing:.5px;background:var(--dark);color:#fff;padding:8px 12px;border-radius:8px 8px 0 0;margin-top:16px}
 table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;border:1px solid var(--line);border-top:none;border-radius:0 0 8px 8px;overflow:hidden}
-th{font-size:11px;text-transform:uppercase;color:#8a817c;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+th{font-family:var(--or-mono);font-size:10px;letter-spacing:var(--or-label-track);text-transform:uppercase;color:#8a817c;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 td{padding:7px 8px;border-bottom:1px solid #f1ecea}
 tr:last-child td{border-bottom:none}
-td.h{font-variant-numeric:tabular-nums;font-weight:600;width:48px}
+td.h{font-family:var(--or-mono);font-variant-numeric:tabular-nums;font-weight:500;width:52px}
 td.z{color:#8a817c;font-size:11px;width:52px}
 tr.oreds{background:#fdf0ee;box-shadow:inset 3px 0 0 var(--red)}
 tr.oreds td{font-weight:600}
