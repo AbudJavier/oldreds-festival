@@ -7,7 +7,7 @@ sitio del club, en `/festival/2026-julio`.
 Este proyecto queda solo como redirección, porque su link y el QR que se
 repartió siguen circulando por WhatsApp.
 
-- Página nueva: https://oldreds-web.vercel.app/festival/2026-julio
+- Página nueva: https://oldreds.vercel.app/festival/2026-julio
 - `index.html` y el QR se conservan como registro; no se sirven.
 - La redirección es temporal (307) a propósito: si algún día conviene volver a
   publicar algo propio en este dominio, basta con sacar `vercel.json`.
