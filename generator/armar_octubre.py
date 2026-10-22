@@ -137,8 +137,9 @@ secciones_html = '\n'.join(out)
 
 # 3. Plantilla de julio ---------------------------------------------------------
 tpl = open(plantilla_path, encoding='utf-8').read()
-# Sin la firma agregada al final (cambio sin commit, pendiente de decidir)
+# La firma se agrega una sola vez al final (si la plantilla ya la trae, se saca)
 tpl = re.sub(r'<div class="firma-pie">.*?</style>\n', '', tpl, flags=re.S)
+FIRMA = '<div class="firma-pie"><a class="firma-bianca" href="https://bianca-studios.vercel.app/?de=oldreds-festival" target="_blank" rel="noopener" title="Pregúntale a Remo"><img src="https://bianca-studios.vercel.app/firma/remo.webp" alt="" width="34" height="34" loading="lazy"><span><i>Sviluppato da</i> Bianca</span><span><i>Powered by</i> Remo</span></a></div>\n<style>.firma-bianca{display:inline-flex;align-items:center;gap:.55em;padding:.35em .55em .35em .35em;border:2px solid #0f0f12;border-radius:4px;background:repeating-linear-gradient(135deg,#cdb8ff 0 10px,#7fe8e0 10px 20px);box-shadow:3px 3px 0 #0f0f12;color:#0f0f12;text-decoration:none;font:600 13px/1.1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.01em}.firma-bianca:hover,.firma-bianca:focus-visible{translate:1px 1px;box-shadow:2px 2px 0 #0f0f12}.firma-bianca img{width:34px;height:34px;display:block;border:2px solid #0f0f12;border-radius:3px;background:#fff}.firma-bianca span{display:inline-block;padding:.3em .55em;border:2px solid #0f0f12;border-radius:3px;background:#fff;white-space:nowrap}.firma-bianca span+span{background:#ffa6d5}.firma-bianca i{font-style:normal;font-weight:400;opacity:.8}.firma-pie{display:flex;justify-content:center;padding:24px 16px}@media (prefers-reduced-motion:reduce){.firma-bianca:hover{translate:0}}</style>\n'
 
 cabeza, resto = tpl.split('<div class="hero">', 1)
 _, script = resto.split('<script>', 1)
@@ -250,6 +251,7 @@ script = rep(script, "    return Object.keys(s).sort();\n",
 script = re.sub(r"  // Easter 2:.*?\n  \};\n\n", "", script, flags=re.S)
 assert 'Juega la Lau' not in script
 
+script = rep(script, '</body>', FIRMA + '</body>')
 open(salida_path, 'w', encoding='utf-8').write(cabeza + medio + secciones_html + pie + script)
 
 total = sum(1 for n in canchas for p in canchas[n] if p[1] != 'RIEGO')
