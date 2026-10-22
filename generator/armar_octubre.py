@@ -74,12 +74,32 @@ with pdfplumber.open(pdf_path) as pdf:
 for n in canchas:
     canchas[n].sort(key=lambda x: x[0])
 
+# Equipos de varones: los que juegan partidos "VAR" (varones contra varones).
+# Sale de las etiquetas del PDF, no de que el nombre venga sin número.
+VARONES = {}
+for n in canchas:
+    for p in canchas[n]:
+        if p[1] != 'RIEGO' and p[2] == 'VAR':
+            VARONES.setdefault(p[1], set()).update((p[3], p[4]))
+for n in canchas:
+    for p in canchas[n]:
+        if p[1] != 'RIEGO' and p[2] == 'D vs V':
+            assert sum(eq in VARONES.get(p[1], ()) for eq in (p[3], p[4])) == 1, p
+# En la página se llaman "<CLUB> VARONES", para que no se confundan con las damas
+SUFIJO_V = ' VARONES'
+for n in canchas:
+    canchas[n] = [p if p[1] == 'RIEGO' else
+                  (p[0], p[1], p[2],
+                   p[3] + SUFIJO_V if p[3] in VARONES.get(p[1], ()) else p[3],
+                   p[4] + SUFIJO_V if p[4] in VARONES.get(p[1], ()) else p[4])
+                  for p in canchas[n]]
+
 # 2. Secciones ------------------------------------------------------------------
 SECCIONES = [
     ('sub10', 'SUB 10', 'Sub 10 Damas y Varones', [1, 2, 3, 4],
-     'Canchas 1 a 4. Damas y varones en canchas 1 y 2 (D vs V: damas contra varones); solo damas en 3 y 4.'),
+     'Canchas 1 a 4. Damas y varones en canchas 1 y 2 (D vs V: damas contra varones); solo damas en 3 y 4. Los equipos de varones dicen VARONES.'),
     ('sub8', 'SUB 8', 'Sub 8 Damas y Varones', [5, 6, 7, 8, 9],
-     'Canchas 5 a 9. Damas y varones en canchas 5 y 6; solo damas en 7, 8 y 9.'),
+     'Canchas 5 a 9. Damas y varones en canchas 5 y 6; solo damas en 7, 8 y 9. Los equipos de varones dicen VARONES.'),
     ('sub6', 'SUB 6', 'Sub 6 Mixto', [10, 11], 'Canchas 10 y 11.'),
 ]
 ZONA_TXT = {'D vs V': 'D vs V', 'VAR': 'Varones'}
@@ -94,8 +114,8 @@ def zonas_de(cat, nums):
             clave = p[2] if p[2] not in ('D vs V', 'VAR') else 'VAR'
             s = z.setdefault(clave, [])
             for eq in (p[3], p[4]):
-                # En "D vs V" el equipo con número es de damas: no va a "Varones"
-                if p[2] == 'D vs V' and re.search(r'\d$', eq):
+                # En "D vs V" solo el equipo de varones va a la zona "Varones"
+                if p[2] == 'D vs V' and not eq.endswith(SUFIJO_V):
                     continue
                 if eq not in s:
                     s.append(eq)
@@ -274,6 +294,22 @@ script = rep(script, "mine.sort(function(a,b){return a.cancha<b.cancha?-1:1;});"
              "mine.sort(function(a,b){return a.cancha-b.cancha;});")
 script = rep(script, "'#141414'", "'var(--or-ink)'")
 script = rep(script, "Festival Old Reds, Sáb 25 Jul, Cancha UC", "Festival Old Reds, Sáb 24 Oct, Cancha UC")
+# Varones: el club agrupa sin el sufijo, y el buscador tiene "SUB 10 VARONES", etc.
+script = rep(script, "function clubOf(name){var m=name.match(",
+             "function clubOf(name){var m=name.replace(/ VARONES$/,'').match(")
+cats_js = []
+for c in ['SUB 10', 'SUB 8', 'SUB 6']:
+    cats_js.append(c)
+    if VARONES.get(c):
+        cats_js.append(c + SUFIJO_V)
+script = rep(script, "var CATS=['SUB 10','SUB 8','SUB 6'];",
+             "var CATS=" + repr(cats_js).replace("'", "'") + ";\n"
+             "  // 'SUB 10 VARONES' filtra los equipos de varones de SUB 10\n"
+             "  function baseCat(v){return v.replace(/ VARONES$/,'');}\n"
+             "  function itemsFor(v){var t=teamsFor(baseCat(v));return v===baseCat(v)?t:t.filter(function(x){return / VARONES$/.test(x);});}")
+script = rep(script, "var items=(selCat.value==='CLUB')?allClubs():teamsFor(selCat.value);",
+             "var items=(selCat.value==='CLUB')?allClubs():itemsFor(selCat.value);")
+script = rep(script, "else apply(selCat.value,selTeam.value);", "else apply(baseCat(selCat.value),selTeam.value);", 2)
 # Orden alfabético en español (ÁGUILAS junto a ALUMNI, no al final)
 script = rep(script, "    return Object.keys(s).sort();\n",
              "    return Object.keys(s).sort(function(a,b){return a.localeCompare(b,'es',{numeric:true});});\n", 2)
