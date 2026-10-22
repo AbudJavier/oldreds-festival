@@ -159,7 +159,12 @@ cabeza = cabeza.replace(
     '.lgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;')
 cabeza = cabeza.replace('.lc{border-radius:6px;padding:14px 4px;color:#fff}',
                         '.lc{border-radius:6px;padding:14px 2px;color:#fff;line-height:1.25}\n'
-                        '.lx{font-size:10px;font-weight:600;color:var(--dim);text-align:center;padding:2px 0;letter-spacing:.3px}')
+                        '.lx{font-size:10px;font-weight:600;color:var(--dim);text-align:center;padding:2px 0;letter-spacing:.3px}\n'
+                        '.ausp{padding-top:14px}\n'
+                        '.ausp-t{font-family:var(--or-mono);font-size:var(--or-label-size);letter-spacing:var(--or-label-track);text-transform:uppercase;color:var(--ink);margin-bottom:8px}\n'
+                        '.ausp-l{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}\n'
+                        '.ausp-l li{background:var(--or-paper-surface);border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:12px 10px;min-height:84px}\n'
+                        '.ausp-l img{display:block;max-width:100%;width:auto}')
 
 medio = '''<div class="hero">
 ''' + re.search(r'<div class="hero">\n(<img [^\n]*>)', tpl).group(1) + '''
@@ -206,6 +211,15 @@ medio = '''<div class="hero">
 </div>
 </details>
 </div>
+
+<section class="ausp" aria-label="Auspiciadores del festival">
+<p class="ausp-t">Auspician</p>
+<ul class="ausp-l">
+<li><img src="assets/auspiciadores/bruno-fritsch.jpg" alt="Bruno Fritsch" width="400" height="53" style="height:20px"></li>
+<li><img src="assets/auspiciadores/kastor.jpg" alt="Kastor" width="614" height="160" style="height:26px"></li>
+<li><img src="assets/auspiciadores/receta-del-abuelo.jpg" alt="Receta del Abuelo" width="173" height="160" style="height:58px"></li>
+</ul>
+</section>
 
 '''
 
