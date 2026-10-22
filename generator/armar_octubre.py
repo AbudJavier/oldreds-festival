@@ -135,6 +135,11 @@ for sid, cat, titulo, nums, nota in SECCIONES:
     out.append('')
 secciones_html = '\n'.join(out)
 
+def rep(s, a, b, n=1):
+    assert s.count(a) == n, (a, s.count(a))
+    return s.replace(a, b)
+
+
 # 3. Plantilla de julio ---------------------------------------------------------
 tpl = open(plantilla_path, encoding='utf-8').read()
 # La firma se agrega una sola vez al final (si la plantilla ya la trae, se saca)
@@ -150,6 +155,20 @@ cabeza = (cabeza
                    '<title>Festival Infantil · Old Reds · Sáb 24 Octubre</title>')
           .replace('content="Festival Infantil Old Reds — Sáb 25 Julio"',
                    'content="Festival Infantil Old Reds — Sáb 24 Octubre"'))
+# Vista previa al compartir (WhatsApp y otros): el escudo del club
+OG = '''<meta property="og:image" content="https://oldreds-festival.vercel.app/assets/og-festival.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Escudo de Old Reds">
+<meta property="og:site_name" content="Old Reds">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Festival Infantil Old Reds, sábado 24 de octubre en Cancha UC. Busca tu equipo y encuentra tus horarios y canchas.">
+'''
+cabeza = rep(cabeza, '<meta property="og:url" content="https://oldreds-festival.vercel.app">\n',
+             '<meta property="og:url" content="https://oldreds-festival.vercel.app">\n' + OG)
+cabeza = rep(cabeza, 'content="Programación SUB 10, SUB 8 y SUB 6. Busca tu equipo y encuentra tus horarios y canchas. Cancha UC."',
+             'content="Sábado 24 de octubre, Cancha UC. Programación SUB 10, SUB 8 y SUB 6: busca tu equipo y encuentra tus horarios y canchas."')
 # Mapa: 11 canchas en 5 columnas
 cabeza = cabeza.replace(
     '.lgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1.4fr;',
@@ -228,9 +247,6 @@ pie = '''<footer>
 '''
 
 # 4. Ajustes al script ----------------------------------------------------------
-def rep(s, a, b, n=1):
-    assert s.count(a) == n, (a, s.count(a))
-    return s.replace(a, b)
 
 script = rep(script,
     "var TC={'O.REDS':'#CD5241','COGS':'#1a5276','S.FRANCÉS':'#2471a3','MANQ':'#28b463','ALERCES':'#1e8449','S.ITALIANO':'#45b39d','PIONEROS CH':'#7d3c98','SJCH':'#e67e22','MACCABI':'#d4ac0d','O.GABS':'#5dade2'};",
