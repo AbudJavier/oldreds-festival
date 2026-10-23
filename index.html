@@ -123,6 +123,12 @@ summary{padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer;color:va
 .lc{border-radius:6px;padding:14px 2px;color:#fff;line-height:1.25}
 .lx{font-size:10px;font-weight:600;color:var(--dim);text-align:center;padding:2px 0;letter-spacing:.3px}
 .ausp{padding-top:14px}
+:root{--aviso-bg:#fff8e6;--aviso-borde:#ecd9a6;--aviso-texto:var(--or-paper-ink)}
+.aviso-llegada{max-width:640px;margin:12px auto 0;padding:0 12px}
+.aviso-llegada p{background:var(--aviso-bg);border:1px solid var(--aviso-borde);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.4;color:var(--aviso-texto)}
+.mis-llega{padding:10px 14px;background:var(--aviso-bg);border-bottom:1px solid var(--aviso-borde);font-size:14px;line-height:1.4;color:var(--aviso-texto)}
+.mis-llega b{font-variant-numeric:tabular-nums}
+.mis-sep .llega{font-size:12px;font-weight:600;text-transform:none;letter-spacing:0;margin-left:8px;color:var(--aviso-texto);font-variant-numeric:tabular-nums}
 .ausp-t{font-family:var(--or-mono);font-size:var(--or-label-size);letter-spacing:var(--or-label-track);text-transform:uppercase;color:var(--ink);margin-bottom:8px}
 .ausp-l{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .ausp-l li{background:var(--or-paper-surface);border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:12px 10px;min-height:84px}
@@ -308,6 +314,8 @@ tr.mine td{font-weight:700}
 <h1>Festival Infantil</h1>
 <p>SUB 10 · SUB 8 · SUB 6 — Sábado 24 de octubre · Cancha UC · Old Reds</p>
 </div>
+
+<div class="aviso-llegada"><p><b>Llega 30 minutos antes de tu primer partido.</b> Este sábado hay atletismo en San Carlos de Apoquindo y se espera taco.</p></div>
 
 <div class="finder">
 <div class="finder-card">
@@ -774,6 +782,8 @@ tr.mine td{font-weight:700}
   function openMap(){if(finderMap&&!finderMap.open) finderMap.open=true;}
   function badgeClass(n){return (+n<=4)?'g':'b';}
   function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}
+  var ANTICIPO=30;
+  function llegada(lista){var m=Math.min.apply(null,lista.map(function(x){return toMins(x.hora);}))-ANTICIPO;var hh=Math.floor(m/60),mm=m%60;return (hh<10?'0':'')+hh+':'+(mm<10?'0':'')+mm;}
   function isEventDay(){var d=new Date();return d.getMonth()===9&&d.getDate()===24;}
 
   function apply(cat,team){
@@ -798,6 +808,9 @@ tr.mine td{font-weight:700}
     misHead.textContent=team+' · '+cat+' — '+mine.length+' partidos';
     misHead.style.background=tColor(team);
     misList.innerHTML='';
+    var av=document.createElement('div');av.className='mis-llega';
+    av.innerHTML='Llega a las <b>'+llegada(mine)+'</b>: 30 minutos antes de tu primer partido.';
+    misList.appendChild(av);
     var canchas={};
     mine.forEach(function(x,i){
       canchas[x.cancha]=1;
@@ -866,7 +879,7 @@ tr.mine td{font-weight:700}
         misList.appendChild(catBox);
       }
       var sep=document.createElement('div');sep.className='mis-sep';
-      sep.innerHTML=grp.name;
+      sep.innerHTML=grp.name+'<span class="llega">llega '+llegada(grp.matches)+'</span>';
       catBox.appendChild(sep);
 
       var sorted=grp.matches.sort(function(a,b){return a.hora<b.hora?-1:1;});

@@ -200,6 +200,12 @@ cabeza = cabeza.replace('.lc{border-radius:6px;padding:14px 4px;color:#fff}',
                         '.lc{border-radius:6px;padding:14px 2px;color:#fff;line-height:1.25}\n'
                         '.lx{font-size:10px;font-weight:600;color:var(--dim);text-align:center;padding:2px 0;letter-spacing:.3px}\n'
                         '.ausp{padding-top:14px}\n'
+                        ':root{--aviso-bg:#fff8e6;--aviso-borde:#ecd9a6;--aviso-texto:var(--or-paper-ink)}\n'
+                        '.aviso-llegada{max-width:640px;margin:12px auto 0;padding:0 12px}\n'
+                        '.aviso-llegada p{background:var(--aviso-bg);border:1px solid var(--aviso-borde);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.4;color:var(--aviso-texto)}\n'
+                        '.mis-llega{padding:10px 14px;background:var(--aviso-bg);border-bottom:1px solid var(--aviso-borde);font-size:14px;line-height:1.4;color:var(--aviso-texto)}\n'
+                        '.mis-llega b{font-variant-numeric:tabular-nums}\n'
+                        '.mis-sep .llega{font-size:12px;font-weight:600;text-transform:none;letter-spacing:0;margin-left:8px;color:var(--aviso-texto);font-variant-numeric:tabular-nums}\n'
                         '.ausp-t{font-family:var(--or-mono);font-size:var(--or-label-size);letter-spacing:var(--or-label-track);text-transform:uppercase;color:var(--ink);margin-bottom:8px}\n'
                         '.ausp-l{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}\n'
                         '.ausp-l li{background:var(--or-paper-surface);border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:12px 10px;min-height:84px}\n'
@@ -210,6 +216,8 @@ medio = '''<div class="hero">
 <h1>Festival Infantil</h1>
 <p>SUB 10 · SUB 8 · SUB 6 — Sábado 24 de octubre · Cancha UC · Old Reds</p>
 </div>
+
+<div class="aviso-llegada"><p><b>Llega 30 minutos antes de tu primer partido.</b> Este sábado hay atletismo en San Carlos de Apoquindo y se espera taco.</p></div>
 
 <div class="finder">
 <div class="finder-card">
@@ -310,6 +318,19 @@ script = rep(script, "var CATS=['SUB 10','SUB 8','SUB 6'];",
 script = rep(script, "var items=(selCat.value==='CLUB')?allClubs():teamsFor(selCat.value);",
              "var items=(selCat.value==='CLUB')?allClubs():itemsFor(selCat.value);")
 script = rep(script, "else apply(selCat.value,selTeam.value);", "else apply(baseCat(selCat.value),selTeam.value);", 2)
+# Hora de llegada: 30 minutos antes del primer partido
+script = rep(script, "function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}",
+             "function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}\n"
+             "  var ANTICIPO=30;\n"
+             "  function llegada(lista){var m=Math.min.apply(null,lista.map(function(x){return toMins(x.hora);}))-ANTICIPO;"
+             "var hh=Math.floor(m/60),mm=m%60;return (hh<10?'0':'')+hh+':'+(mm<10?'0':'')+mm;}")
+script = rep(script, "    misHead.style.background=tColor(team);\n    misList.innerHTML='';\n",
+             "    misHead.style.background=tColor(team);\n    misList.innerHTML='';\n"
+             "    var av=document.createElement('div');av.className='mis-llega';\n"
+             "    av.innerHTML='Llega a las <b>'+llegada(mine)+'</b>: 30 minutos antes de tu primer partido.';\n"
+             "    misList.appendChild(av);\n")
+script = rep(script, "      sep.innerHTML=grp.name;",
+             "      sep.innerHTML=grp.name+'<span class=\"llega\">llega '+llegada(grp.matches)+'</span>';")
 # Orden alfabético en español (ÁGUILAS junto a ALUMNI, no al final)
 script = rep(script, "    return Object.keys(s).sort();\n",
              "    return Object.keys(s).sort(function(a,b){return a.localeCompare(b,'es',{numeric:true});});\n", 2)
