@@ -123,6 +123,25 @@ summary{padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer;color:va
 .lc{border-radius:6px;padding:14px 2px;color:#fff;line-height:1.25}
 .lx{font-size:10px;font-weight:600;color:var(--dim);text-align:center;padding:2px 0;letter-spacing:.3px}
 .ausp{padding-top:14px}
+.prog-head{max-width:640px;margin:0 auto;padding:22px 12px 0}
+.prog-head h2{margin-bottom:4px}
+.prog-head .cat-note{margin-left:14px;margin-bottom:0}
+section{padding:10px 12px}
+details.cat-d,details.cancha{background:transparent;border:0;margin:0;border-radius:0}
+details.cat-d>summary{list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:8px 34px 8px 0;position:relative}
+details.cat-d>summary h2{margin:0}
+.cat-m{font-family:var(--or-mono);font-size:12px;color:var(--ink);font-variant-numeric:tabular-nums}
+details>summary::-webkit-details-marker{display:none}
+details.cat-d>summary::after,details.cancha>summary::after{content:"";position:absolute;right:12px;top:50%;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+details[open].cat-d>summary::after,details[open].cancha>summary::after{transform:translateY(-30%) rotate(-135deg)}
+.cat-body{padding-top:4px}
+details.cancha{margin-top:10px}
+details.cancha>summary{list-style:none;padding:0;position:relative;display:flex;align-items:center;gap:10px;background:var(--dark);color:#fff;border-radius:8px}
+details[open].cancha>summary{border-radius:8px 8px 0 0}
+details.cancha>summary h3{margin:0;background:none;padding:10px 0 10px 12px}
+.can-m{font-family:var(--or-mono);font-size:11px;color:#d8d0cc;font-variant-numeric:tabular-nums;padding-right:34px}
+details.cat-d>summary:focus-visible,details.cancha>summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){details>summary::after{transition:none}}
 :root{--aviso-bg:#fff8e6;--aviso-borde:#ecd9a6;--aviso-texto:var(--or-paper-ink)}
 .aviso-llegada{max-width:640px;margin:12px auto 0;padding:0 12px}
 .aviso-llegada p{background:var(--aviso-bg);border:1px solid var(--aviso-borde);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.4;color:var(--aviso-texto)}
@@ -366,10 +385,13 @@ tr.mine td{font-weight:700}
 </ul>
 </section>
 
+<div class="prog-head"><h2>Programación completa</h2><p class="cat-note">Toca una categoría para ver sus canchas. Si eliges tu equipo arriba, se abren solas.</p></div>
+
 <section id="sub10">
-<h2>Sub 10 Damas y Varones</h2>
+<details class="cat-d"><summary><h2>Sub 10 Damas y Varones</h2><span class="cat-m">Canchas 1 a 4 · 84 partidos</span></summary>
+<div class="cat-body">
 <p class="cat-note">Canchas 1 a 4. Damas y varones en canchas 1 y 2 (D vs V: damas contra varones); solo damas en 3 y 4. Los equipos de varones dicen VARONES.</p>
-<details><summary>Ver zonas SUB 10</summary><div class="zonas">
+<details class="zonas-d"><summary>Ver zonas SUB 10</summary><div class="zonas">
 <div class="zona"><b>Zona A</b>U.CATÓLICA 1 · ALUMNI 1 · COGS 1 · DUNNERS 1</div>
 <div class="zona"><b>Zona B</b>O.GABS 1 · DUNNERS 2 · S.FRANCÉS 1 · COGS 2</div>
 <div class="zona"><b>Zona C</b>DUNNERS 3 · COGS 3 · ÁGUILAS 1 · U.CATÓLICA 2</div>
@@ -386,7 +408,7 @@ tr.mine td{font-weight:700}
 <div class="zona"><b>Varones</b>BRITISH VARONES · S.FRANCÉS VARONES · ALUMNI VARONES</div>
 </div></details>
 
-<h3>Cancha 1</h3>
+<details class="cancha" data-cancha="1"><summary><h3>Cancha 1</h3><span class="can-m">21 partidos · 09:00 a 14:15</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 10"><td class="h">09:00</td><td class="z">Z A</td><td>U.CATÓLICA 1</td><td>ALUMNI 1</td></tr>
 <tr data-cat="SUB 10"><td class="h">09:15</td><td class="z">D vs V</td><td>U.CATÓLICA 1</td><td>BRITISH VARONES</td></tr>
@@ -410,9 +432,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 10"><td class="h">13:45</td><td class="z">Z D</td><td>COGS 4</td><td>ALUMNI 2</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:00</td><td class="z">Z E</td><td>U.CATÓLICA 3</td><td>COGS 5</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:15</td><td class="z">Z F</td><td>O.GABS 2</td><td>O.EAGLES 1</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 2</h3>
+<details class="cancha" data-cancha="2"><summary><h3>Cancha 2</h3><span class="can-m">21 partidos · 09:00 a 14:15</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 10"><td class="h">09:00</td><td class="z">Z A</td><td>DUNNERS 1</td><td>COGS 1</td></tr>
 <tr data-cat="SUB 10"><td class="h">09:15</td><td class="z">Varones</td><td>S.FRANCÉS VARONES</td><td>ALUMNI VARONES</td></tr>
@@ -436,9 +458,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 10"><td class="h">13:45</td><td class="z">Z D</td><td>O.LOCKS 1</td><td>O.REDS 1</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:00</td><td class="z">Z E</td><td>DUNNERS 4</td><td>ALL BRADS 1</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:15</td><td class="z">Z F</td><td>S.FRANCÉS 2</td><td>ALERCES 1</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 3</h3>
+<details class="cancha" data-cancha="3"><summary><h3>Cancha 3</h3><span class="can-m">21 partidos · 09:00 a 14:15</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 10"><td class="h">09:00</td><td class="z">Z G</td><td>PIONEROS 1</td><td>DUNNERS 5</td></tr>
 <tr data-cat="SUB 10"><td class="h">09:15</td><td class="z">Z H</td><td>ALL BRADS 2</td><td>DUNNERS 6</td></tr>
@@ -462,9 +484,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 10"><td class="h">13:45</td><td class="z">Z K</td><td>O.GABS 3</td><td>U.CATÓLICA 4</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:00</td><td class="z">Z L</td><td>ÁGUILAS 3</td><td>DUNNERS 10</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:15</td><td class="z">Z M</td><td>COGS 9</td><td>O.LOCKS 4</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 4</h3>
+<details class="cancha" data-cancha="4"><summary><h3>Cancha 4</h3><span class="can-m">21 partidos · 09:00 a 14:15</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 10"><td class="h">09:00</td><td class="z">Z G</td><td>O.LOCKS 2</td><td>ALUMNI 3</td></tr>
 <tr data-cat="SUB 10"><td class="h">09:15</td><td class="z">Z H</td><td>O.LOCKS 3</td><td>ALERCES 2</td></tr>
@@ -488,14 +510,16 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 10"><td class="h">13:45</td><td class="z">Z K</td><td>DUNNERS 9</td><td>ALUMNI 4</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:00</td><td class="z">Z L</td><td>COGS 8</td><td>ALUMNI 5</td></tr>
 <tr data-cat="SUB 10"><td class="h">14:15</td><td class="z">Z M</td><td>ALUMNI 6</td><td>DUNNERS 11</td></tr>
-</table>
+</table></details>
 
+</div></details>
 </section>
 
 <section id="sub8">
-<h2>Sub 8 Damas y Varones</h2>
+<details class="cat-d"><summary><h2>Sub 8 Damas y Varones</h2><span class="cat-m">Canchas 5 a 9 · 93 partidos</span></summary>
+<div class="cat-body">
 <p class="cat-note">Canchas 5 a 9. Damas y varones en canchas 5 y 6; solo damas en 7, 8 y 9. Los equipos de varones dicen VARONES.</p>
-<details><summary>Ver zonas SUB 8</summary><div class="zonas">
+<details class="zonas-d"><summary>Ver zonas SUB 8</summary><div class="zonas">
 <div class="zona"><b>Zona A</b>COGS 1 · DUNNERS 1 · O.REDS 1 · O.GABS 1 · ALUMNI 1</div>
 <div class="zona"><b>Zona B</b>U.CATÓLICA 1 · COGS 2 · S.FRANCÉS 1 · DUNNERS 2 · ÁGUILAS 1</div>
 <div class="zona"><b>Zona C</b>COGS 3 · PIONEROS 1 · ALUMNI 2 · DUNNERS 3</div>
@@ -513,7 +537,7 @@ tr.mine td{font-weight:700}
 <div class="zona"><b>Varones</b>S.FRANCÉS VARONES · BRITISH VARONES</div>
 </div></details>
 
-<h3>Cancha 5</h3>
+<details class="cancha" data-cancha="5"><summary><h3>Cancha 5</h3><span class="can-m">19 partidos · 09:00 a 13:45</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 8"><td class="h">09:00</td><td class="z">Z A</td><td>COGS 1</td><td>DUNNERS 1</td></tr>
 <tr data-cat="SUB 8"><td class="h">09:15</td><td class="z">Z A</td><td>O.REDS 1</td><td>COGS 1</td></tr>
@@ -535,9 +559,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 8"><td class="h">13:15</td><td class="z">Z C</td><td>ALUMNI 2</td><td>COGS 3</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:30</td><td class="z">Z D</td><td>U.CATÓLICA 2</td><td>COGS 4</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:45</td><td class="z">Z E</td><td>ALUMNI 3</td><td>ALL BRADS 1</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 6</h3>
+<details class="cancha" data-cancha="6"><summary><h3>Cancha 6</h3><span class="can-m">18 partidos · 09:00 a 13:45</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 8"><td class="h">09:00</td><td class="z">Z A</td><td>O.REDS 1</td><td>O.GABS 1</td></tr>
 <tr data-cat="SUB 8"><td class="h">09:15</td><td class="z">Z A</td><td>DUNNERS 1</td><td>ALUMNI 1</td></tr>
@@ -558,9 +582,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 8"><td class="h">13:15</td><td class="z">Z C</td><td>DUNNERS 3</td><td>PIONEROS 1</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:30</td><td class="z">Z D</td><td>DUNNERS 4</td><td>O.LOCKS 1</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:45</td><td class="z">Z E</td><td>U.CATÓLICA 3</td><td>O.EAGLES 1</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 7</h3>
+<details class="cancha" data-cancha="7"><summary><h3>Cancha 7</h3><span class="can-m">19 partidos · 09:00 a 13:45</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 8"><td class="h">09:00</td><td class="z">Z F</td><td>ALERCES 1</td><td>DUNNERS 5</td></tr>
 <tr data-cat="SUB 8"><td class="h">09:15</td><td class="z">Z G</td><td>O.REDS 2</td><td>DUNNERS 6</td></tr>
@@ -582,9 +606,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 8"><td class="h">13:15</td><td class="z">Z J</td><td>COGS 5</td><td>ALERCES 2</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:30</td><td class="z">Z K</td><td>DUNNERS 10</td><td>S.FRANCÉS 3</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:45</td><td class="z">Z K</td><td>S.FRANCÉS 3</td><td>ÁGUILAS 2</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 8</h3>
+<details class="cancha" data-cancha="8"><summary><h3>Cancha 8</h3><span class="can-m">19 partidos · 09:00 a 13:45</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 8"><td class="h">09:00</td><td class="z">Z F</td><td>PELTRUN 1</td><td>S.FRANCÉS 2</td></tr>
 <tr data-cat="SUB 8"><td class="h">09:15</td><td class="z">Z G</td><td>ALUMNI 4</td><td>O.GABS 2</td></tr>
@@ -606,9 +630,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 8"><td class="h">13:15</td><td class="z">Z J</td><td>ALUMNI 7</td><td>DUNNERS 9</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:30</td><td class="z">Z K</td><td>ÁGUILAS 2</td><td>O.LOCKS 3</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:45</td><td class="z">Z K</td><td>ALUMNI 8</td><td>DUNNERS 10</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 9</h3>
+<details class="cancha" data-cancha="9"><summary><h3>Cancha 9</h3><span class="can-m">18 partidos · 09:15 a 13:30</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 8"><td class="h">09:15</td><td class="z">Z L</td><td>COGS 6</td><td>ALUMNI 9</td></tr>
 <tr data-cat="SUB 8"><td class="h">09:30</td><td class="z">Z L</td><td>DUNNERS 11</td><td>ALERCES 3</td></tr>
@@ -628,14 +652,16 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 8"><td class="h">13:00</td><td class="z">Z N</td><td>DUNNERS 13</td><td>ALUMNI 11</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:15</td><td class="z">Z N</td><td>ALERCES 4</td><td>ALUMNI 11</td></tr>
 <tr data-cat="SUB 8"><td class="h">13:30</td><td class="z">Z N</td><td>DUNNERS 13</td><td>COGS 8</td></tr>
-</table>
+</table></details>
 
+</div></details>
 </section>
 
 <section id="sub6">
-<h2>Sub 6 Mixto</h2>
+<details class="cat-d"><summary><h2>Sub 6 Mixto</h2><span class="cat-m">Canchas 10 y 11 · 40 partidos</span></summary>
+<div class="cat-body">
 <p class="cat-note">Canchas 10 y 11.</p>
-<details><summary>Ver zonas SUB 6</summary><div class="zonas">
+<details class="zonas-d"><summary>Ver zonas SUB 6</summary><div class="zonas">
 <div class="zona"><b>Zona A</b>O.REDS 1 · COGS 1 · O.GABS 1 · DUNNERS 1 · U.CATÓLICA 1</div>
 <div class="zona"><b>Zona B</b>DUNNERS 2 · O.REDS 2 · ALUMNI 1 · S.FRANCÉS 1 · O.LOCKS 1</div>
 <div class="zona"><b>Zona C</b>ALL BRADS 1 · COGS 2 · DUNNERS 3 · ALUMNI 2 · O.REDS 3</div>
@@ -643,7 +669,7 @@ tr.mine td{font-weight:700}
 <div class="zona"><b>Zona E</b>COGS 4 · O.REDS 5 · O.LOCKS 3 · ALUMNI 4 · DUNNERS 5</div>
 </div></details>
 
-<h3>Cancha 10</h3>
+<details class="cancha" data-cancha="10"><summary><h3>Cancha 10</h3><span class="can-m">20 partidos · 09:00 a 13:45</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 6"><td class="h">09:00</td><td class="z">Z A</td><td>O.REDS 1</td><td>COGS 1</td></tr>
 <tr data-cat="SUB 6"><td class="h">09:15</td><td class="z">Z A</td><td>O.GABS 1</td><td>O.REDS 1</td></tr>
@@ -665,9 +691,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 6"><td class="h">13:15</td><td class="z">Z D</td><td>ALUMNI 3</td><td>COGS 3</td></tr>
 <tr data-cat="SUB 6"><td class="h">13:30</td><td class="z">Z E</td><td>ALUMNI 4</td><td>COGS 4</td></tr>
 <tr data-cat="SUB 6"><td class="h">13:45</td><td class="z">Z E</td><td>COGS 4</td><td>DUNNERS 5</td></tr>
-</table>
+</table></details>
 
-<h3>Cancha 11</h3>
+<details class="cancha" data-cancha="11"><summary><h3>Cancha 11</h3><span class="can-m">20 partidos · 09:00 a 13:45</span></summary>
 <table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>
 <tr data-cat="SUB 6"><td class="h">09:00</td><td class="z">Z A</td><td>O.GABS 1</td><td>DUNNERS 1</td></tr>
 <tr data-cat="SUB 6"><td class="h">09:15</td><td class="z">Z A</td><td>COGS 1</td><td>U.CATÓLICA 1</td></tr>
@@ -689,8 +715,9 @@ tr.mine td{font-weight:700}
 <tr data-cat="SUB 6"><td class="h">13:15</td><td class="z">Z D</td><td>DUNNERS 4</td><td>O.LOCKS 2</td></tr>
 <tr data-cat="SUB 6"><td class="h">13:30</td><td class="z">Z E</td><td>DUNNERS 5</td><td>O.LOCKS 3</td></tr>
 <tr data-cat="SUB 6"><td class="h">13:45</td><td class="z">Z E</td><td>O.REDS 5</td><td>ALUMNI 4</td></tr>
-</table>
+</table></details>
 
+</div></details>
 </section>
 <footer>
 <p style="margin-bottom:8px"><a href="https://oldreds.vercel.app" style="color:var(--or-red);text-decoration:underline">Ir al sitio de Old Reds</a></p>Old Reds Hockey · Festival Infantil 24/10 · Cancha UC</footer>
@@ -702,12 +729,10 @@ tr.mine td{font-weight:700}
 
   // 1. Leer partidos desde las tablas (fuente única: el HTML)
   var MATCHES=[];
-  document.querySelectorAll('h3').forEach(function(h){
-    var m=h.textContent.match(/Cancha\s+(\d+)/i);
-    if(!m) return;
-    var cancha=m[1];
-    var table=h.nextElementSibling;
-    if(!table||table.tagName!=='TABLE') return;
+  document.querySelectorAll('details.cancha').forEach(function(d){
+    var cancha=d.getAttribute('data-cancha');
+    var table=d.querySelector('table');
+    if(!table) return;
     table.querySelectorAll('tr').forEach(function(tr){
       var td=tr.querySelectorAll('td');
       if(td.length<4) return;
@@ -771,6 +796,7 @@ tr.mine td{font-weight:700}
   function mapCells(){return document.querySelectorAll('.lgrid .lc');}
   var finderMap=document.querySelector('.finder-map');
   function clearAll(){
+    cerrarAbiertos();
     document.querySelectorAll('tr.mine').forEach(function(r){r.classList.remove('mine');});
     mapCells().forEach(function(c){c.classList.remove('mine','dim');});
     misCard.classList.remove('on');
@@ -779,6 +805,9 @@ tr.mine td{font-weight:700}
     misHead.style.background='';
     if(shareBtn){shareBtn.style.display='none';shareBtn.textContent='📤 Compartir programación';}
   }
+  var abiertos=[];
+  function abrir(tr){var c=tr.closest('details.cancha'),k=tr.closest('details.cat-d');[k,c].forEach(function(d){if(d&&!d.open){d.open=true;abiertos.push(d);}});}
+  function cerrarAbiertos(){abiertos.forEach(function(d){d.open=false;});abiertos=[];}
   function openMap(){if(finderMap&&!finderMap.open) finderMap.open=true;}
   function badgeClass(n){return (+n<=4)?'g':'b';}
   function toMins(h){var p=h.split(':');return parseInt(p[0])*60+parseInt(p[1]);}
@@ -814,7 +843,7 @@ tr.mine td{font-weight:700}
     var canchas={};
     mine.forEach(function(x,i){
       canchas[x.cancha]=1;
-      x.row.classList.add('mine');
+      x.row.classList.add('mine');abrir(x.row);
       var rival=(x.eq1===team)?x.eq2:x.eq1;
       var timeBadge='';
       if(i===ahoraIdx) timeBadge='<span class="badge-now">AHORA</span>';

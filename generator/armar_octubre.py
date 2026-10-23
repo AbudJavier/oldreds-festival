@@ -126,20 +126,31 @@ def orden_zona(k):
     return (1, '') if k == 'VAR' else (0, k)
 
 
-out = []
+def partidos_de(n):
+    return [p for p in canchas.get(n, []) if p[1] != 'RIEGO']
+
+
+out = ['<div class="prog-head"><h2>Programación completa</h2>'
+       '<p class="cat-note">Toca una categoría para ver sus canchas. Si eliges tu equipo arriba, se abren solas.</p></div>', '']
 for sid, cat, titulo, nums, nota in SECCIONES:
+    total_cat = sum(len(partidos_de(n)) for n in nums)
+    rango = f'Canchas {nums[0]} a {nums[-1]}' if len(nums) > 2 else f'Canchas {nums[0]} y {nums[-1]}'
     out.append(f'<section id="{sid}">')
-    out.append(f'<h2>{html.escape(titulo)}</h2>')
+    out.append(f'<details class="cat-d"><summary><h2>{html.escape(titulo)}</h2>'
+               f'<span class="cat-m">{rango} · {total_cat} partidos</span></summary>')
+    out.append('<div class="cat-body">')
     out.append(f'<p class="cat-note">{html.escape(nota)}</p>')
     zs = zonas_de(cat, nums)
-    out.append(f'<details><summary>Ver zonas {cat}</summary><div class="zonas">')
+    out.append(f'<details class="zonas-d"><summary>Ver zonas {cat}</summary><div class="zonas">')
     for k in sorted(zs, key=orden_zona):
         nombre = 'Varones' if k == 'VAR' else 'Zona ' + k.replace('Z ', '')
         out.append(f'<div class="zona"><b>{nombre}</b>{" · ".join(html.escape(e) for e in zs[k])}</div>')
     out.append('</div></details>')
     out.append('')
     for n in nums:
-        out.append(f'<h3>Cancha {n}</h3>')
+        ps = partidos_de(n)
+        out.append(f'<details class="cancha" data-cancha="{n}"><summary><h3>Cancha {n}</h3>'
+                   f'<span class="can-m">{len(ps)} partidos · {ps[0][0]} a {ps[-1][0]}</span></summary>')
         out.append('<table><tr><th>Hora</th><th>Zona</th><th>Equipo 1</th><th>Equipo 2</th></tr>')
         for p in canchas.get(n, []):
             if p[1] == 'RIEGO':
@@ -149,8 +160,9 @@ for sid, cat, titulo, nums, nota in SECCIONES:
             z = ZONA_TXT.get(zona, zona)
             out.append(f'<tr data-cat="{c}"><td class="h">{hora}</td><td class="z">{html.escape(z)}</td>'
                        f'<td>{html.escape(e1)}</td><td>{html.escape(e2)}</td></tr>')
-        out.append('</table>')
+        out.append('</table></details>')
         out.append('')
+    out.append('</div></details>')
     out.append('</section>')
     out.append('')
 secciones_html = '\n'.join(out)
@@ -200,6 +212,25 @@ cabeza = cabeza.replace('.lc{border-radius:6px;padding:14px 4px;color:#fff}',
                         '.lc{border-radius:6px;padding:14px 2px;color:#fff;line-height:1.25}\n'
                         '.lx{font-size:10px;font-weight:600;color:var(--dim);text-align:center;padding:2px 0;letter-spacing:.3px}\n'
                         '.ausp{padding-top:14px}\n'
+                        '.prog-head{max-width:640px;margin:0 auto;padding:22px 12px 0}\n'
+                        '.prog-head h2{margin-bottom:4px}\n'
+                        '.prog-head .cat-note{margin-left:14px;margin-bottom:0}\n'
+                        'section{padding:10px 12px}\n'
+                        'details.cat-d,details.cancha{background:transparent;border:0;margin:0;border-radius:0}\n'
+                        'details.cat-d>summary{list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:8px 34px 8px 0;position:relative}\n'
+                        'details.cat-d>summary h2{margin:0}\n'
+                        '.cat-m{font-family:var(--or-mono);font-size:12px;color:var(--ink);font-variant-numeric:tabular-nums}\n'
+                        'details>summary::-webkit-details-marker{display:none}\n'
+                        'details.cat-d>summary::after,details.cancha>summary::after{content:"";position:absolute;right:12px;top:50%;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-70%) rotate(45deg);transition:transform .15s}\n'
+                        'details[open].cat-d>summary::after,details[open].cancha>summary::after{transform:translateY(-30%) rotate(-135deg)}\n'
+                        '.cat-body{padding-top:4px}\n'
+                        'details.cancha{margin-top:10px}\n'
+                        'details.cancha>summary{list-style:none;padding:0;position:relative;display:flex;align-items:center;gap:10px;background:var(--dark);color:#fff;border-radius:8px}\n'
+                        'details[open].cancha>summary{border-radius:8px 8px 0 0}\n'
+                        'details.cancha>summary h3{margin:0;background:none;padding:10px 0 10px 12px}\n'
+                        '.can-m{font-family:var(--or-mono);font-size:11px;color:#d8d0cc;font-variant-numeric:tabular-nums;padding-right:34px}\n'
+                        'details.cat-d>summary:focus-visible,details.cancha>summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}\n'
+                        '@media (prefers-reduced-motion:reduce){details>summary::after{transition:none}}\n'
                         ':root{--aviso-bg:#fff8e6;--aviso-borde:#ecd9a6;--aviso-texto:var(--or-paper-ink)}\n'
                         '.aviso-llegada{max-width:640px;margin:12px auto 0;padding:0 12px}\n'
                         '.aviso-llegada p{background:var(--aviso-bg);border:1px solid var(--aviso-borde);border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.4;color:var(--aviso-texto)}\n'
@@ -331,6 +362,26 @@ script = rep(script, "    misHead.style.background=tColor(team);\n    misList.in
              "    misList.appendChild(av);\n")
 script = rep(script, "      sep.innerHTML=grp.name;",
              "      sep.innerHTML=grp.name+'<span class=\"llega\">llega '+llegada(grp.matches)+'</span>';")
+# Canchas en <details>: la tabla ya no sigue al h3
+script = rep(script, """  document.querySelectorAll('h3').forEach(function(h){
+    var m=h.textContent.match(/Cancha\\s+(\\d+)/i);
+    if(!m) return;
+    var cancha=m[1];
+    var table=h.nextElementSibling;
+    if(!table||table.tagName!=='TABLE') return;""", """  document.querySelectorAll('details.cancha').forEach(function(d){
+    var cancha=d.getAttribute('data-cancha');
+    var table=d.querySelector('table');
+    if(!table) return;""")
+# Al elegir un equipo se abren su categoría y sus canchas; al limpiar se cierran
+script = rep(script, "  function openMap(){",
+             "  var abiertos=[];\n"
+             "  function abrir(tr){var c=tr.closest('details.cancha'),k=tr.closest('details.cat-d');"
+             "[k,c].forEach(function(d){if(d&&!d.open){d.open=true;abiertos.push(d);}});}\n"
+             "  function cerrarAbiertos(){abiertos.forEach(function(d){d.open=false;});abiertos=[];}\n"
+             "  function openMap(){")
+script = rep(script, "  function clearAll(){\n", "  function clearAll(){\n    cerrarAbiertos();\n")
+script = rep(script, "      x.row.classList.add('mine');\n      var rival=(x.eq1===team)?x.eq2:x.eq1;",
+             "      x.row.classList.add('mine');abrir(x.row);\n      var rival=(x.eq1===team)?x.eq2:x.eq1;")
 # Orden alfabético en español (ÁGUILAS junto a ALUMNI, no al final)
 script = rep(script, "    return Object.keys(s).sort();\n",
              "    return Object.keys(s).sort(function(a,b){return a.localeCompare(b,'es',{numeric:true});});\n", 2)
