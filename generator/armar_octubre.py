@@ -212,6 +212,10 @@ cabeza = cabeza.replace('.lc{border-radius:6px;padding:14px 4px;color:#fff}',
                         '.lc{border-radius:6px;padding:14px 2px;color:#fff;line-height:1.25}\n'
                         '.lx{font-size:10px;font-weight:600;color:var(--dim);text-align:center;padding:2px 0;letter-spacing:.3px}\n'
                         '.ausp{padding-top:14px}\n'
+                        '.sorteo-cta{max-width:640px;margin:14px auto 0;padding:0 12px;text-align:center}\n'
+                        '.sorteo-btn{display:block;background:var(--red);color:#fff;text-decoration:none;border-radius:8px;padding:14px 16px;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.5px}\n'
+                        '.sorteo-btn:focus-visible{outline:3px solid var(--dark);outline-offset:2px}\n'
+                        '.sorteo-nota{font-size:12px;color:var(--ink);margin-top:6px}\n'
                         '.prog-head{max-width:640px;margin:0 auto;padding:22px 12px 0}\n'
                         '.prog-head h2{margin-bottom:4px}\n'
                         '.prog-head .cat-note{margin-left:14px;margin-bottom:0}\n'
@@ -289,6 +293,11 @@ medio = '''<div class="hero">
 </div>
 </details>
 </div>
+
+<section class="sorteo-cta" aria-label="Sorteo Bruno Fritsch">
+<a class="sorteo-btn" href="https://oldreds.vercel.app/sorteo">Quiero participar en el sorteo de Old Reds</a>
+<p class="sorteo-nota">Productos donados por Bruno Fritsch. Solo mayores de 18. El ganador se anuncia por micrófono.</p>
+</section>
 
 <section class="ausp" aria-label="Auspiciadores del festival">
 <p class="ausp-t">Auspician</p>
