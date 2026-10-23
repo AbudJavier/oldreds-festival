@@ -217,7 +217,7 @@ medio = '''<div class="hero">
 <p>SUB 10 · SUB 8 · SUB 6 — Sábado 24 de octubre · Cancha UC · Old Reds</p>
 </div>
 
-<div class="aviso-llegada"><p><b>Llega 30 minutos antes de tu primer partido.</b> Este sábado hay atletismo en San Carlos de Apoquindo y se espera taco.</p></div>
+<div class="aviso-llegada"><p><b>Llega 30 minutos antes de tu primer partido.</b> Este sábado hay atletismo en San Carlos de Apoquindo: evita el taco.</p></div>
 
 <div class="finder">
 <div class="finder-card">
