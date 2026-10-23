@@ -302,7 +302,7 @@ medio = '''<div class="hero">
 '''
 
 pie = '''<footer>
-<p style="margin-bottom:8px"><a href="https://oldreds.vercel.app" style="color:var(--or-red);text-decoration:underline">Ir al sitio de Old Reds</a></p>Old Reds Hockey · Festival Infantil 24/10 · Cancha UC</footer>
+Old Reds Hockey · Festival Infantil 24/10 · Cancha UC</footer>
 '''
 
 # 4. Ajustes al script ----------------------------------------------------------
@@ -382,6 +382,13 @@ script = rep(script, "  function openMap(){",
 script = rep(script, "  function clearAll(){\n", "  function clearAll(){\n    cerrarAbiertos();\n")
 script = rep(script, "      x.row.classList.add('mine');\n      var rival=(x.eq1===team)?x.eq2:x.eq1;",
              "      x.row.classList.add('mine');abrir(x.row);\n      var rival=(x.eq1===team)?x.eq2:x.eq1;")
+# Sin links a las otras páginas de Old Reds: el festival se sostiene solo
+cabeza = rep(cabeza, '<a class="or-brand" href="https://oldreds.vercel.app" aria-label="Ir al sitio de Old Reds">',
+             '<div class="or-brand">')
+cabeza = rep(cabeza, '<span class="or-ctx">Festival infantil</span></span>\n</a>',
+             '<span class="or-ctx">Festival infantil</span></span>\n</div>')
+cabeza = re.sub(r'<div class="or-push or-links">.*?</span>\n</div>\n', '', cabeza, count=1, flags=re.S)
+assert 'oldreds-app.vercel.app' not in cabeza and 'href="https://oldreds.vercel.app"' not in cabeza
 # Orden alfabético en español (ÁGUILAS junto a ALUMNI, no al final)
 script = rep(script, "    return Object.keys(s).sort();\n",
              "    return Object.keys(s).sort(function(a,b){return a.localeCompare(b,'es',{numeric:true});});\n", 2)
